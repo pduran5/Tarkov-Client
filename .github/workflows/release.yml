@@ -2,6 +2,7 @@ name: Release Build and Deploy
 
 on:
   push:
+    branches: [ "main" ]
     tags:
       - "v*.*.*" # v0.0.1, v1.2.3 등의 태그가 푸시될 때만 실행
   workflow_dispatch: # 수동 실행도 가능
@@ -33,8 +34,11 @@ jobs:
             echo "tag_name=v$version" >> $env:GITHUB_OUTPUT
             echo "Extracted version: $version"
           } else {
-            Write-Error "This workflow should only run on tag pushes. Current ref: ${{ github.ref }}"
-            exit 1
+            $version = "0.0.0-dev"
+            $shortSha = "${{ github.sha }}".Substring(0, 7)
+            echo "version=$version" >> $env:GITHUB_OUTPUT
+            echo "tag_name=dev-$shortSha" >> $env:GITHUB_OUTPUT
+            echo "Not a tag push. Using dev version: $version"
           }
 
       - name: Update project version
@@ -108,7 +112,7 @@ jobs:
           }
 
       - name: Create Release with installer
-        if: steps.check_installer.outputs.installer_exists == 'true'
+        if: steps.check_installer.outputs.installer_exists == 'true' && startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -121,7 +125,7 @@ jobs:
           prerelease: false
 
       - name: Create Release without installer
-        if: steps.check_installer.outputs.installer_exists != 'true'
+        if: steps.check_installer.outputs.installer_exists != 'true' && startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -131,4 +135,12 @@ jobs:
             TarkovClient-${{ steps.get_version.outputs.tag_name }}.zip
           draft: false
           prerelease: false
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: TarkovClient-Build
+          path: |
+            TarkovClient-*.zip
+            setup/Output/TarkovClientSetup.exe
 
