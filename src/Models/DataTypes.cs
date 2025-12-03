@@ -4,7 +4,7 @@ namespace TarkovClient
 {
     public class MapSetting
     {
-        public bool enabled { get; set; } = true; // 해당 맵에서 PiP 기능 활성화 여부
+        public bool enabled { get; set; } = true; // Si la función PiP está activa en este mapa
         public string transform { get; set; }
         public double width { get; set; } = 300;
         public double height { get; set; } = 250;
@@ -17,29 +17,29 @@ namespace TarkovClient
         public string gameFolder { get; set; }
         public string screenshotsFolder { get; set; }
 
-        // PiP 설정 추가
-        public bool pipEnabled { get; set; } = false; // PiP 기능 활성화/비활성화
-        public bool pipRememberPosition { get; set; } = true; // 위치 기억 여부
-        public bool pipHotkeyEnabled { get; set; } = false; // PiP 활성화 버튼 사용 여부
-        public string pipHotkeyKey { get; set; } = "F11"; // 사용자 설정 핫키
+        // Agregar configuración de PiP
+        public bool pipEnabled { get; set; } = false; // Activar/Desactivar función PiP
+        public bool pipRememberPosition { get; set; } = true; // Si recordar posición
+        public bool pipHotkeyEnabled { get; set; } = false; // Si usar botón de activación de PiP
+        public string pipHotkeyKey { get; set; } = "F11"; // Tecla rápida personalizada
 
-        // 일반 모드 설정 추가
-        public double normalWidth { get; set; } // 일반 모드 창 너비
-        public double normalHeight { get; set; } // 일반 모드 창 높이
-        public double normalLeft { get; set; } // 일반 모드 창 X 위치 (-1: 자동 계산)
-        public double normalTop { get; set; } // 일반 모드 창 Y 위치 (-1: 자동 계산)
+        // Agregar configuración de modo normal
+        public double normalWidth { get; set; } // Ancho de ventana en modo normal
+        public double normalHeight { get; set; } // Alto de ventana en modo normal
+        public double normalLeft { get; set; } // Posición X de ventana en modo normal (-1: cálculo automático)
+        public double normalTop { get; set; } // Posición Y de ventana en modo normal (-1: cálculo automático)
 
-        // 맵별 개별 설정
+        // Configuración individual por mapa
         public Dictionary<string, MapSetting> mapSettings { get; set; } = new Dictionary<string, MapSetting>();
 
-        // PiP 자동 복원 설정
-        public bool enableAutoRestore { get; set; } = true; // 자동 요소 복원 기능 활성화
-        public double restoreThresholdWidth { get; set; } = 800; // 복원 임계 너비
-        public double restoreThresholdHeight { get; set; } = 600; // 복원 임계 높이
+        // Configuración de restauración automática de PiP
+        public bool enableAutoRestore { get; set; } = true; // Activar función de restauración automática de elementos
+        public double restoreThresholdWidth { get; set; } = 800; // Ancho umbral de restauración
+        public double restoreThresholdHeight { get; set; } = 600; // Alto umbral de restauración
 
-        // 파일 자동 정리 설정
-        public bool autoDeleteLogs { get; set; } = false; // 로그 폴더 자동 정리
-        public bool autoDeleteScreenshots { get; set; } = false; // 스크린샷 자동 정리
+        // Configuración de limpieza automática de archivos
+        public bool autoDeleteLogs { get; set; } = false; // Limpieza automática de carpeta de registros
+        public bool autoDeleteScreenshots { get; set; } = false; // Limpieza automática de capturas de pantalla
 
         public override string ToString()
         {

@@ -115,7 +115,7 @@ namespace TarkovClient
             notifLogFileWatcher.Changed += OnLogFileChanged;
             notifLogFileWatcher.Start();
 
-            // 모니터링 시작
+            // Iniciar monitoreo
         }
 
         static void ClearLogsWatcher()
@@ -209,7 +209,7 @@ namespace TarkovClient
                                     // sending raw location name
                                     Server.SendMap(map);
 
-                                    // 1차 트리거: 맵 변경 시 PiP 활성화
+                                    // 1er disparador: Activar PiP al cambiar de mapa
                                     if (
                                         Env.GetSettings().pipEnabled
                                         && PipController.Instance != null
@@ -228,7 +228,7 @@ namespace TarkovClient
                                     // sending raw location name
                                     Server.SendMap(map);
 
-                                    // 1차 트리거: 맵 변경 시 PiP 활성화
+                                    // 1er disparador: Activar PiP al cambiar de mapa
                                     if (
                                         Env.GetSettings().pipEnabled
                                         && PipController.Instance != null
@@ -296,7 +296,7 @@ namespace TarkovClient
                                                 var questId = parts[0];
                                                 if (!string.IsNullOrEmpty(questId))
                                                 {
-                                                    // 퀘스트 업데이트 전송
+                                                    // Enviar actualización de misión
                                                     Server.SendQuestUpdate(questId, status);
                                                 }
                                             }
@@ -305,7 +305,7 @@ namespace TarkovClient
                                 }
                                 catch (System.Text.Json.JsonException)
                                 {
-                                    // JSON 파싱 에러 무시
+                                    // Ignorar error de análisis JSON
                                 }
                             }
                         }
@@ -317,7 +317,7 @@ namespace TarkovClient
             }
             catch (Exception)
             {
-                // 로그 파일 처리 에러 무시
+                // Ignorar error de procesamiento de archivo de registro
             }
 
             // initial read completed

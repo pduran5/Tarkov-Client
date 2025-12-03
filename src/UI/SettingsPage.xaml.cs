@@ -9,32 +9,32 @@ using System.Windows.Media;
 namespace TarkovClient
 {
     /// <summary>
-    /// SettingsPage.xaml에 대한 상호 작용 논리
+    /// Lógica de interacción para SettingsPage.xaml
     /// </summary>
     public partial class SettingsPage : System.Windows.Controls.UserControl
     {
-        // 핫키 입력 모드 플래그
+        // Bandera de modo de entrada de teclas rápidas
         private bool _isHotkeyInputMode = false;
 
-        // 한국 명칭(영어) -> 게임 내부 이름 매핑 (실제 테스트 결과 기반)
+        // Mapeo de nombre en español (inglés) -> nombre interno del juego (basado en resultados de pruebas reales)
         private readonly Dictionary<string, string> _mapDisplayToInternal = new Dictionary<
             string,
             string
         >
         {
-            ["그라운드 제로(Ground Zero)"] = "sandbox_high_preset",
-            ["팩토리/공장(Factory)"] = "factory_day_preset",
-            ["커스텀/세관(Customs)"] = "customs_preset",
-            ["우드/삼림(Woods)"] = "woods_preset",
-            ["쇼어라인/해안선(Shoreline)"] = "shoreline_preset",
-            ["인터체인지/교차로/울트라(Interchange)"] = "shopping_mall",
-            ["리저브/군사기지/밀베(Reserve)"] = "rezerv_base_preset",
-            ["랩/연구소(The Lab)"] = "laboratory_preset",
-            ["라이트하우스/등대(Lighthouse)"] = "lighthouse_preset",
-            ["스트리트 오브 타르코프(Streets of Tarkov)"] = "city_preset",
+            ["Ground Zero"] = "sandbox_high_preset",
+            ["Factory"] = "factory_day_preset",
+            ["Customs"] = "customs_preset",
+            ["Woods"] = "woods_preset",
+            ["Shoreline"] = "shoreline_preset",
+            ["Interchange"] = "shopping_mall",
+            ["Reserve"] = "rezerv_base_preset",
+            ["The Lab"] = "laboratory_preset",
+            ["Lighthouse"] = "lighthouse_preset",
+            ["Streets of Tarkov"] = "city_preset",
         };
 
-        // 게임 내부 이름 -> 한국 명칭(영어) 역방향 매핑
+        // Mapeo inverso de nombre interno del juego -> nombre en español (inglés)
         private readonly Dictionary<string, string> _mapInternalToDisplay;
 
         private readonly string[] _mapDisplayNames;
@@ -43,22 +43,22 @@ namespace TarkovClient
         {
             InitializeComponent();
 
-            // 역방향 매핑 딕셔너리 초기화
+            // Inicializar diccionario de mapeo inverso
             _mapInternalToDisplay = _mapDisplayToInternal.ToDictionary(
                 kvp => kvp.Value,
                 kvp => kvp.Key
             );
 
-            // 디스플레이 이름 배열 초기화
+            // Inicializar arreglo de nombres de visualización
             _mapDisplayNames = _mapDisplayToInternal.Keys.ToArray();
             LoadSettings();
             CreateMapSettingsUI();
-            UpdateMapSettingsState(); // 초기 상태 설정
-            UpdateHotkeySettingsState(); // 핫키 설정 상태 설정
+            UpdateMapSettingsState(); // Configuración del estado inicial
+            UpdateHotkeySettingsState(); // Configuración del estado de teclas rápidas
         }
 
         /// <summary>
-        /// 현재 설정을 UI에 로드
+        /// Cargar configuración actual en UI
         /// </summary>
         private void LoadSettings()
         {
@@ -66,17 +66,17 @@ namespace TarkovClient
             {
                 var settings = Env.GetSettings();
 
-                // 전역 PiP 설정
+                // Configuración global de PiP
                 GlobalPipEnabledCheckBox.IsChecked = settings.pipEnabled;
 
-                // PiP 위치 기억 설정
+                // Configuración de recordar posición de PiP
                 PipRememberPositionCheckBox.IsChecked = settings.pipRememberPosition;
 
-                // PiP 핫키 설정
+                // Configuración de teclas rápidas de PiP
                 PipHotkeyEnabledCheckBox.IsChecked = settings.pipHotkeyEnabled;
                 PipHotkeyButton.Content = settings.pipHotkeyKey;
 
-                // 파일 자동 정리 설정
+                // Configuración de limpieza automática de archivos
                 AutoDeleteLogsCheckBox.IsChecked = settings.autoDeleteLogs;
                 AutoDeleteScreenshotsCheckBox.IsChecked = settings.autoDeleteScreenshots;
             }
@@ -84,7 +84,7 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 맵별 설정 UI 동적 생성
+        /// Generación dinámica de UI de configuración por mapa
         /// </summary>
         private void CreateMapSettingsUI()
         {
@@ -95,14 +95,14 @@ namespace TarkovClient
 
                 foreach (string mapDisplayName in _mapDisplayNames)
                 {
-                    // 맵별 설정 패널 생성
+                    // Crear panel de configuración por mapa
                     var mapPanel = new StackPanel
                     {
                         Orientation = System.Windows.Controls.Orientation.Horizontal,
                         Margin = new Thickness(0, 5, 0, 5),
                     };
 
-                    // PiP 활성화 체크박스 (체크박스가 먼저)
+                    // Checkbox de activación de PiP (checkbox primero)
                     var enabledCheckBox = new System.Windows.Controls.CheckBox
                     {
                         Content = mapDisplayName,
@@ -112,7 +112,7 @@ namespace TarkovClient
                         Tag = mapDisplayName,
                     };
 
-                    // 현재 설정 값 적용 (내부 이름으로 검색)
+                    // Aplicar valor de configuración actual (buscar por nombre interno)
                     string mapInternalName = _mapDisplayToInternal[mapDisplayName];
                     if (
                         settings.mapSettings != null
@@ -123,14 +123,14 @@ namespace TarkovClient
                     }
                     else
                     {
-                        enabledCheckBox.IsChecked = true; // 기본값
+                        enabledCheckBox.IsChecked = true; // Valor predeterminado
                     }
 
-                    // 체크박스 이벤트 핸들러
+                    // Manejador de eventos del checkbox
                     enabledCheckBox.Checked += MapEnabled_Changed;
                     enabledCheckBox.Unchecked += MapEnabled_Changed;
 
-                    // 패널에 컨트롤 추가 (체크박스만)
+                    // Agregar control al panel (solo checkbox)
                     mapPanel.Children.Add(enabledCheckBox);
 
                     MapSettingsPanel.Children.Add(mapPanel);
@@ -140,24 +140,24 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 전역 PiP 활성화 설정 변경
+        /// Cambio de configuración de activación global de PiP
         /// </summary>
         private void GlobalPipEnabled_Changed(object sender, RoutedEventArgs e)
         {
-            // 맵별 설정의 활성화/비활성화 상태 업데이트
+            // Actualizar estado de activación/desactivación de configuración por mapa
             UpdateMapSettingsState();
         }
 
         /// <summary>
-        /// 맵별 활성화 설정 변경
+        /// Cambio de configuración de activación por mapa
         /// </summary>
         private void MapEnabled_Changed(object sender, RoutedEventArgs e)
         {
-            // 실시간 저장은 하지 않고 Save 버튼으로만 저장
+            // No guardar en tiempo real, solo guardar con el botón Guardar
         }
 
         /// <summary>
-        /// PiP 핫키 활성화 설정 변경
+        /// Cambio de configuración de activación de tecla rápida de PiP
         /// </summary>
         private void PipHotkeyEnabled_Changed(object sender, RoutedEventArgs e)
         {
@@ -165,7 +165,7 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 맵별 설정 및 종속 설정들의 활성화/비활성화 상태 업데이트
+        /// Actualizar estado de activación/desactivación de configuraciones por mapa y dependientes
         /// </summary>
         private void UpdateMapSettingsState()
         {
@@ -173,35 +173,35 @@ namespace TarkovClient
             {
                 bool isPipEnabled = GlobalPipEnabledCheckBox.IsChecked ?? false;
 
-                // 1. 종속 설정들 활성화/비활성화
-                // PiP 위치 기억 설정
+                // 1. Activar/desactivar configuraciones dependientes
+                // Configuración de recordar posición de PiP
                 PipRememberPositionCheckBox.IsEnabled = isPipEnabled;
                 PipRememberPositionCheckBox.Opacity = isPipEnabled ? 1.0 : 0.5;
 
-                // PiP 핫키 활성화 설정
+                // Configuración de activación de tecla rápida de PiP
                 PipHotkeyEnabledCheckBox.IsEnabled = isPipEnabled;
                 PipHotkeyEnabledCheckBox.Opacity = isPipEnabled ? 1.0 : 0.5;
 
-                // PiP가 비활성화되면 핫키 설정도 함께 비활성화
+                // Si PiP está desactivado, la configuración de teclas rápidas también se desactiva
                 if (!isPipEnabled)
                 {
-                    UpdateHotkeySettingsState(); // 핫키 관련 UI 업데이트
+                    UpdateHotkeySettingsState(); // Actualizar UI relacionada con teclas rápidas
                 }
                 else
                 {
-                    // PiP가 활성화되면 핫키 설정 상태에 따라 업데이트
+                    // Si PiP está activado, actualizar según el estado de configuración de teclas rápidas
                     UpdateHotkeySettingsState();
                 }
 
-                // 2. 맵별 설정 패널의 모든 컨트롤 상태 변경
+                // 2. Cambiar estado de todos los controles en el panel de configuración por mapa
                 foreach (StackPanel mapPanel in MapSettingsPanel.Children.OfType<StackPanel>())
                 {
-                    // 체크박스 찾기
+                    // Buscar checkbox
                     var checkBox = mapPanel
                         .Children.OfType<System.Windows.Controls.CheckBox>()
                         .FirstOrDefault();
 
-                    // 체크박스 활성화/비활성화
+                    // Activar/desactivar checkbox
                     if (checkBox != null)
                     {
                         checkBox.IsEnabled = isPipEnabled;
@@ -213,7 +213,7 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 저장 버튼 클릭
+        /// Clic en botón Guardar
         /// </summary>
         private void Save_Click(object sender, RoutedEventArgs e)
         {
@@ -221,19 +221,19 @@ namespace TarkovClient
             {
                 var settings = Env.GetSettings();
 
-                // 전역 PiP 설정 저장
+                // Guardar configuración global de PiP
                 settings.pipEnabled = GlobalPipEnabledCheckBox.IsChecked ?? true;
                 settings.pipRememberPosition = PipRememberPositionCheckBox.IsChecked ?? true;
                 settings.pipHotkeyEnabled = PipHotkeyEnabledCheckBox.IsChecked ?? false;
                 settings.pipHotkeyKey = PipHotkeyButton.Content?.ToString()?.Trim() ?? "F11";
 
-                // 맵별 설정 저장
+                // Guardar configuración por mapa
                 if (settings.mapSettings == null)
                 {
                     settings.mapSettings = new Dictionary<string, MapSetting>();
                 }
 
-                // 각 맵별 설정 저장
+                // Guardar configuración para cada mapa
                 foreach (StackPanel mapPanel in MapSettingsPanel.Children.OfType<StackPanel>())
                 {
                     var checkBox = mapPanel
@@ -248,7 +248,7 @@ namespace TarkovClient
                             && _mapDisplayToInternal.ContainsKey(mapDisplayName)
                         )
                         {
-                            // 디스플레이 이름을 내부 이름으로 변환
+                            // Convertir nombre de visualización a nombre interno
                             string mapInternalName = _mapDisplayToInternal[mapDisplayName];
 
                             if (!settings.mapSettings.ContainsKey(mapInternalName))
@@ -262,23 +262,23 @@ namespace TarkovClient
                     }
                 }
 
-                // 파일 자동 정리 설정 저장
+                // Guardar configuración de limpieza automática de archivos
                 settings.autoDeleteLogs = AutoDeleteLogsCheckBox.IsChecked ?? false;
                 settings.autoDeleteScreenshots = AutoDeleteScreenshotsCheckBox.IsChecked ?? false;
 
-                // 설정 저장
+                // Guardar configuración
                 Env.SetSettings(settings);
                 Settings.Save();
 
-                // 핫키 설정이 변경된 경우 MainWindow에서 핫키 재등록
+                // Si la configuración de teclas rápidas cambió, volver a registrar en MainWindow
                 if (System.Windows.Application.Current.MainWindow is MainWindow mainWindow)
                 {
                     mainWindow.UpdateHotkeySettings();
                 }
 
                 System.Windows.MessageBox.Show(
-                    "설정이 저장되었습니다.",
-                    "설정 저장",
+                    "Configuración guardada.",
+                    "Configuración",
                     MessageBoxButton.OK,
                     MessageBoxImage.Information
                 );
@@ -286,8 +286,8 @@ namespace TarkovClient
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(
-                    $"설정 저장 중 오류가 발생했습니다: {ex.Message}",
-                    "오류",
+                    $"Error al guardar la configuración: {ex.Message}",
+                    "Error",
                     MessageBoxButton.OK,
                     MessageBoxImage.Error
                 );
@@ -295,7 +295,7 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 핫키 설정 활성화/비활성화 상태 업데이트
+        /// Actualizar estado de activación/desactivación de configuración de teclas rápidas
         /// </summary>
         private void UpdateHotkeySettingsState()
         {
@@ -305,11 +305,11 @@ namespace TarkovClient
                 bool isHotkeyEnabled =
                     (PipHotkeyEnabledCheckBox.IsChecked ?? false) && isPipEnabled;
 
-                // 핫키 버튼 활성화 상태 설정
+                // Establecer estado de activación del botón de tecla rápida
                 PipHotkeyButton.IsEnabled = isHotkeyEnabled;
                 PipHotkeyButton.Opacity = isHotkeyEnabled ? 1.0 : 0.5;
 
-                // 안내 텍스트 투명도 조정
+                // Ajustar opacidad del texto de guía
                 foreach (var child in HotkeyInputPanel.Children)
                 {
                     if (child is TextBlock textBlock)
@@ -329,18 +329,18 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 핫키 버튼 클릭 시 (입력 모드 시작)
+        /// Al hacer clic en el botón de tecla rápida (iniciar modo de entrada)
         /// </summary>
         private void PipHotkeyButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                PipHotkeyButton.Content = "키를 눌러주세요...";
+                PipHotkeyButton.Content = "Presione una tecla...";
                 PipHotkeyButton.Background = new System.Windows.Media.SolidColorBrush(
                     System.Windows.Media.Color.FromRgb(0x6A, 0x6A, 0x2A)
-                ); // 노란빛
+                ); // Luz amarilla
 
-                // 포커스 설정 및 확인
+                // Establecer y verificar foco
                 bool focusResult = PipHotkeyButton.Focus();
 
                 _isHotkeyInputMode = true;
@@ -349,23 +349,23 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 핫키 버튼 포커스 해제 시 (입력 모드 종료)
+        /// Al perder el foco del botón de tecla rápida (terminar modo de entrada)
         /// </summary>
         private void PipHotkeyButton_LostFocus(object sender, RoutedEventArgs e)
         {
             try
             {
-                // 입력 모드 종료
+                // Terminar modo de entrada
                 _isHotkeyInputMode = false;
 
-                // 원래 상태로 복원
+                // Restaurar estado original
                 PipHotkeyButton.Background = new System.Windows.Media.SolidColorBrush(
                     System.Windows.Media.Color.FromRgb(0x3A, 0x3A, 0x3A)
                 );
 
-                // 빈 값이거나 안내 텍스트인 경우 기본값으로 설정
+                // Si está vacío o es texto de guía, establecer valor predeterminado
                 if (
-                    PipHotkeyButton.Content?.ToString() == "키를 눌러주세요..."
+                    PipHotkeyButton.Content?.ToString() == "Pulsa una tecla..."
                     || string.IsNullOrWhiteSpace(PipHotkeyButton.Content?.ToString())
                 )
                 {
@@ -376,7 +376,7 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 핫키 버튼 PreviewKeyDown 이벤트 (모든 키 캐치)
+        /// Evento PreviewKeyDown del botón de tecla rápida (capturar todas las teclas)
         /// </summary>
         private void PipHotkeyButton_PreviewKeyDown(
             object sender,
@@ -390,20 +390,20 @@ namespace TarkovClient
                     return;
                 }
 
-                // Tab 키는 포커스 이동을 위해 허용
+                // Permitir tecla Tab para mover el foco
                 if (e.Key == System.Windows.Input.Key.Tab)
                 {
                     return;
                 }
 
-                // 단일 키 분석 및 즉시 설정
+                // Analizar tecla única y establecer inmediatamente
                 string keyString = e.Key.ToString();
 
                 if (!string.IsNullOrEmpty(keyString))
                 {
                     PipHotkeyButton.Content = keyString;
 
-                    // 입력 모드 종료 및 포커스 해제
+                    // Terminar modo de entrada y liberar foco
                     _isHotkeyInputMode = false;
                     PipHotkeyButton.Background = new System.Windows.Media.SolidColorBrush(
                         System.Windows.Media.Color.FromRgb(0x3A, 0x3A, 0x3A)
@@ -415,14 +415,14 @@ namespace TarkovClient
                     );
                 }
 
-                // 키 입력 차단
+                // Bloquear entrada de tecla
                 e.Handled = true;
             }
             catch (Exception) { }
         }
 
         /// <summary>
-        /// 핫키 버튼 KeyDown 이벤트 (실제 키 처리)
+        /// Evento KeyDown del botón de tecla rápida (procesamiento real de teclas)
         /// </summary>
         private void PipHotkeyButton_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
@@ -433,7 +433,7 @@ namespace TarkovClient
                     return;
                 }
 
-                // Tab 키는 포커스 이동을 위해 무시
+                // Ignorar tecla Tab para mover el foco
                 if (e.Key == System.Windows.Input.Key.Tab)
                 {
                     return;
@@ -445,7 +445,7 @@ namespace TarkovClient
                 {
                     PipHotkeyButton.Content = keyString;
 
-                    // 키 입력 후 포커스 해제하여 입력 모드 종료
+                    // Liberar foco después de la entrada de tecla para terminar el modo de entrada
                     PipHotkeyButton.MoveFocus(
                         new System.Windows.Input.TraversalRequest(
                             System.Windows.Input.FocusNavigationDirection.Next
@@ -459,7 +459,7 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 키와 모디파이어를 문자열로 변환
+        /// Convertir tecla y modificadores a cadena
         /// </summary>
         private string GetKeyString(
             System.Windows.Input.Key key,
@@ -470,7 +470,7 @@ namespace TarkovClient
             {
                 var keyParts = new List<string>();
 
-                // 모디파이어 키 추가
+                // Agregar teclas modificadoras
                 if (modifiers.HasFlag(System.Windows.Input.ModifierKeys.Control))
                     keyParts.Add("Ctrl");
                 if (modifiers.HasFlag(System.Windows.Input.ModifierKeys.Alt))
@@ -480,7 +480,7 @@ namespace TarkovClient
                 if (modifiers.HasFlag(System.Windows.Input.ModifierKeys.Windows))
                     keyParts.Add("Win");
 
-                // 메인 키 추가
+                // Agregar tecla principal
                 string mainKey = GetMainKeyString(key);
                 if (!string.IsNullOrEmpty(mainKey))
                 {
@@ -497,23 +497,23 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 메인 키를 문자열로 변환
+        /// Convertir tecla principal a cadena
         /// </summary>
         private string GetMainKeyString(System.Windows.Input.Key key)
         {
-            // F키
+            // Teclas F
             if (key >= System.Windows.Input.Key.F1 && key <= System.Windows.Input.Key.F12)
                 return key.ToString();
 
-            // 숫자 키
+            // Teclas numéricas
             if (key >= System.Windows.Input.Key.D0 && key <= System.Windows.Input.Key.D9)
                 return key.ToString().Replace("D", "");
 
-            // 알파벳 키
+            // Teclas alfabéticas
             if (key >= System.Windows.Input.Key.A && key <= System.Windows.Input.Key.Z)
                 return key.ToString();
 
-            // 기타 특수 키들
+            // Otras teclas especiales
             switch (key)
             {
                 case System.Windows.Input.Key.Space:

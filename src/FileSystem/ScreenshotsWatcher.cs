@@ -45,7 +45,7 @@ namespace TarkovClient
                 {
                     Server.SendFilename(filename);
                     
-                    // 2차 트리거: 스크린샷 생성 시 PiP 활성화
+                    // 2do disparador: Activar PiP al crear captura de pantalla
                     if (Env.GetSettings().pipEnabled && PipController.Instance != null)
                     {
                         PipController.Instance.OnScreenshotTaken();

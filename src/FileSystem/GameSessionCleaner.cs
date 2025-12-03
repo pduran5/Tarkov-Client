@@ -9,13 +9,13 @@ namespace TarkovClient
     {
 
         /// <summary>
-        /// 프로그램 시작 시 구 로그 폴더들을 정리 (최신 폴더 제외)
+        /// Limpiar carpetas de registros antiguas al iniciar el programa (excluyendo la carpeta más reciente)
         /// </summary>
         public static void CleanOldLogFolders()
         {
             try
             {
-                // 설정 확인 - 자동 삭제가 비활성화되어 있으면 종료
+                // Verificar configuración - Salir si la eliminación automática está desactivada
                 if (!Env.GetSettings().autoDeleteLogs)
                 {
                     return;
@@ -26,26 +26,26 @@ namespace TarkovClient
                     return;
                 }
 
-                // 모든 로그 폴더 가져오기
+                // Obtener todas las carpetas de registros
                 var logDirectories = Directory
                     .GetDirectories(Env.LogsFolder)
                     .OrderByDescending(dir => Directory.GetCreationTime(dir))
                     .ToArray();
 
-                // 최소 2개 이상 폴더가 있을 때만 정리 (최신 1개는 보존)
+                // Limpiar solo si hay al menos 2 carpetas (conservar la más reciente)
                 if (logDirectories.Length <= 1)
                 {
                     return;
                 }
 
-                // 최신 폴더를 제외한 나머지 삭제
+                // Eliminar el resto excepto la carpeta más reciente
                 for (int i = 1; i < logDirectories.Length; i++)
                 {
                     try
                     {
                         var oldLogDir = logDirectories[i];
 
-                        // 폴더 내 모든 파일 삭제 시도
+                        // Intentar eliminar todos los archivos en la carpeta
                         var files = Directory.GetFiles(
                             oldLogDir,
                             "*.*",
@@ -60,34 +60,34 @@ namespace TarkovClient
                             }
                             catch (Exception)
                             {
-                                // 개별 파일 삭제 실패 무시
+                                // Ignorar fallo al eliminar archivo individual
                             }
                         }
 
-                        // 폴더 삭제 시도
+                        // Intentar eliminar carpeta
                         Directory.Delete(oldLogDir, true);
                     }
                     catch (Exception)
                     {
-                        // 폴더 삭제 실패 무시
+                        // Ignorar fallo al eliminar carpeta
                     }
                 }
             }
             catch (Exception)
             {
-                // 전체 프로세스 실패 무시
+                // Ignorar fallo del proceso completo
             }
         }
 
         /// <summary>
-        /// 스크린샷 파일들을 정리 (독립 메서드로 유지)
+        /// Limpiar archivos de capturas de pantalla (mantener como método independiente)
         /// </summary>
 
         public static void CleanScreenshotFiles()
         {
             try
             {
-                // 설정 확인 - 자동 삭제가 비활성화되어 있으면 종료
+                // Verificar configuración - Salir si la eliminación automática está desactivada
                 if (!Env.GetSettings().autoDeleteScreenshots)
                 {
                     return;
@@ -107,15 +107,15 @@ namespace TarkovClient
                     })
                     .ToArray();
 
-                // 병렬 처리로 성능 최적화
+                // Optimización de rendimiento con procesamiento paralelo
                 Parallel.ForEach(screenshotFiles, screenshotFile =>
                 {
                     try
                     {
-                        // 파일 속성 변경 시도 (읽기 전용 해제)
+                        // Intentar cambiar atributos de archivo (desactivar solo lectura)
                         File.SetAttributes(screenshotFile, FileAttributes.Normal);
 
-                        // 강제 삭제 시도
+                        // Intentar eliminación forzada
                         File.Delete(screenshotFile);
                     }
                     catch (UnauthorizedAccessException) { }
@@ -125,7 +125,7 @@ namespace TarkovClient
             }
             catch (Exception)
             {
-                // 에러 무시
+                // Ignorar error
             }
         }
 

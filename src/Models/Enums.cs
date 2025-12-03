@@ -9,7 +9,7 @@
         public const string CONFIGURATION = "CONFIGURATION";
         public const string SETTINGS_UPDATE = "SETTINGS_UPDATE";
         public const string SETTINGS_RESET = "SETTINGS_RESET";
-        // UPDATE 타입 제거됨
+        // Tipo UPDATE eliminado
     }
 
     public static class MapName

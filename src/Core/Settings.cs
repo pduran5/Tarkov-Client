@@ -27,7 +27,7 @@ namespace TarkovClient
         {
             if (!File.Exists(SETTINGS_FILE_PATH))
             {
-                // 설정 파일이 없으면 기본값으로 생성
+                // Si no existe el archivo de configuración, crear con valores predeterminados
                 CreateDefaultSettings();
                 return;
             }
@@ -41,7 +41,7 @@ namespace TarkovClient
             }
             catch (Exception)
             {
-                // 파일 읽기 실패 시 기본값으로 생성
+                // Si falla la lectura del archivo, crear con valores predeterminados
                 CreateDefaultSettings();
             }
         }
@@ -69,7 +69,7 @@ namespace TarkovClient
             };
 
             Env.SetSettings(defaultSettings, true);
-            Save(); // 기본 설정을 파일로 저장
+            Save(); // Guardar configuración predeterminada en archivo
         }
 
         private static System.Collections.Generic.Dictionary<
@@ -79,7 +79,7 @@ namespace TarkovClient
         {
             var mapSettings = new System.Collections.Generic.Dictionary<string, MapSetting>();
 
-            // 테스트 결과 기반 실제 게임 내부 이름들로 기본 설정값 생성
+            // Crear valores de configuración predeterminados con nombres internos reales del juego basados en resultados de pruebas
 
             // Factory (factory_day_preset)
             mapSettings["factory_day_preset"] = new MapSetting()

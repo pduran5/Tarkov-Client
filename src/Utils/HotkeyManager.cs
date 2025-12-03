@@ -7,12 +7,12 @@ using System.Windows.Input;
 namespace TarkovClient.Utils
 {
     /// <summary>
-    /// Low-Level Keyboard Hook을 사용한 시스템 전역 핫키 관리 클래스
-    /// 게임의 입력 독점 모드에서도 동작합니다.
+    /// Clase de gestión de teclas rápidas globales del sistema usando Low-Level Keyboard Hook
+    /// Funciona incluso en modo de entrada exclusiva del juego.
     /// </summary>
     public class HotkeyManager : IDisposable
     {
-        // Low-Level Keyboard Hook 상수
+        // Constantes de Low-Level Keyboard Hook
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
         private const int WM_SYSKEYDOWN = 0x0104;
@@ -41,7 +41,7 @@ namespace TarkovClient.Utils
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
 
-        // Keyboard Hook 델리게이트
+        // Delegado de Keyboard Hook
         private delegate IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam);
 
         // Modifier keys
@@ -55,7 +55,7 @@ namespace TarkovClient.Utils
         private IntPtr _hookID = IntPtr.Zero;
         private readonly LowLevelKeyboardProc _proc = HookCallback;
 
-        // 등록된 핫키 정보
+        // Información de tecla rápida registrada
         private string _registeredKeyString;
         private uint _registeredVirtualKey;
         private bool _requiresControl;
@@ -73,11 +73,11 @@ namespace TarkovClient.Utils
         }
 
         /// <summary>
-        /// 핫키를 등록합니다.
+        /// Registra una tecla rápida.
         /// </summary>
-        /// <param name="keyString">키 문자열 (예: "F11", "Ctrl", "Alt", "T")</param>
-        /// <param name="action">핫키가 눌렸을 때 실행할 액션</param>
-        /// <returns>등록 성공 여부</returns>
+        /// <param name="keyString">Cadena de tecla (ej: "F11", "Ctrl", "Alt", "T")</param>
+        /// <param name="action">Acción a ejecutar cuando se presiona la tecla rápida</param>
+        /// <returns>Éxito del registro</returns>
         public bool RegisterHotkey(string keyString, Action action)
         {
             if (string.IsNullOrEmpty(keyString) || action == null)
@@ -85,15 +85,15 @@ namespace TarkovClient.Utils
 
             try
             {
-                // 기존 핫키 제거
+                // Eliminar tecla rápida existente
                 UnregisterAllHotkeys();
 
-                // 키 문자열 파싱
+                // Analizar cadena de tecla
                 var (modifiers, virtualKey) = ParseKeyString(keyString);
                 if (virtualKey == 0)
                     return false;
 
-                // 핫키 정보 저장
+                // Guardar información de tecla rápida
                 _registeredKeyString = keyString;
                 _registeredVirtualKey = virtualKey;
                 _requiresControl = (modifiers & 0x0002) != 0;
@@ -102,7 +102,7 @@ namespace TarkovClient.Utils
                 _requiresWin = (modifiers & 0x0008) != 0;
                 _registeredAction = action;
 
-                // Low-Level Hook 설치
+                // Instalar Low-Level Hook
                 return InstallHook();
             }
             catch (Exception)
@@ -112,7 +112,7 @@ namespace TarkovClient.Utils
         }
 
         /// <summary>
-        /// Low-Level Keyboard Hook을 설치합니다.
+        /// Instala Low-Level Keyboard Hook.
         /// </summary>
         private bool InstallHook()
         {
@@ -139,7 +139,7 @@ namespace TarkovClient.Utils
         }
 
         /// <summary>
-        /// Low-Level Keyboard Hook 콜백 함수
+        /// Función de devolución de llamada de Low-Level Keyboard Hook
         /// </summary>
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
@@ -147,18 +147,18 @@ namespace TarkovClient.Utils
             {
                 if (nCode >= 0 && _instance != null)
                 {
-                    // 키 다운 이벤트만 처리
+                    // Procesar solo eventos de tecla presionada
                     if (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN)
                     {
-                        // 키보드 입력 정보 구조체에서 가상 키 코드 추출
+                        // Extraer código de tecla virtual de la estructura de información de entrada de teclado
                         int vkCode = Marshal.ReadInt32(lParam);
 
                         if (_instance.IsRegisteredHotkey((uint)vkCode))
                         {
-                            // UI 스레드에서 액션 실행
+                            // Ejecutar acción en el hilo UI
                             _instance._window?.Dispatcher.BeginInvoke(_instance._registeredAction);
 
-                            // 키 이벤트 소비 (게임에 전달하지 않음)
+                            // Consumir evento de tecla (no pasar al juego)
                             return (IntPtr)1;
                         }
                     }
@@ -166,19 +166,19 @@ namespace TarkovClient.Utils
             }
             catch (Exception) { }
 
-            // 등록된 핫키가 아니면 다음 Hook에 전달
+            // Si no es una tecla rápida registrada, pasar al siguiente Hook
             return CallNextHookEx(_instance?._hookID ?? IntPtr.Zero, nCode, wParam, lParam);
         }
 
         /// <summary>
-        /// 현재 키 입력이 등록된 핫키인지 확인합니다.
+        /// Verifica si la entrada de tecla actual es una tecla rápida registrada.
         /// </summary>
         private bool IsRegisteredHotkey(uint vkCode)
         {
             if (_registeredVirtualKey == 0 || vkCode != _registeredVirtualKey)
                 return false;
 
-            // Modifier 키 상태 확인
+            // Verificar estado de teclas modificadoras
             if (_requiresControl && !IsKeyPressed(VK_CONTROL))
                 return false;
 
@@ -191,7 +191,7 @@ namespace TarkovClient.Utils
             if (_requiresWin && !IsKeyPressed(VK_LWIN) && !IsKeyPressed(VK_RWIN))
                 return false;
 
-            // 필요하지 않은 modifier가 눌려있으면 false
+            // Si se presiona un modificador no requerido, devuelve false
             if (!_requiresControl && IsKeyPressed(VK_CONTROL))
                 return false;
 
@@ -208,7 +208,7 @@ namespace TarkovClient.Utils
         }
 
         /// <summary>
-        /// 특정 키가 현재 눌려있는지 확인합니다.
+        /// Verifica si una tecla específica está presionada actualmente.
         /// </summary>
         [DllImport("user32.dll")]
         private static extern short GetKeyState(int nVirtKey);
@@ -219,14 +219,14 @@ namespace TarkovClient.Utils
         }
 
         /// <summary>
-        /// 키 문자열을 파싱하여 modifier와 virtual key를 반환합니다.
+        /// Analiza la cadena de tecla y devuelve modificadores y tecla virtual.
         /// </summary>
         private (uint modifiers, uint virtualKey) ParseKeyString(string keyString)
         {
             uint modifiers = 0;
             string mainKey = keyString;
 
-            // Modifier 키 처리
+            // Procesamiento de teclas modificadoras
             if (keyString.Contains("Ctrl+"))
             {
                 modifiers |= 0x0002; // MOD_CONTROL
@@ -248,18 +248,18 @@ namespace TarkovClient.Utils
                 mainKey = keyString.Replace("Win+", "");
             }
 
-            // 메인 키를 Virtual Key Code로 변환
+            // Convertir tecla principal a código de tecla virtual
             uint virtualKey = GetVirtualKeyCode(mainKey);
 
             return (modifiers, virtualKey);
         }
 
         /// <summary>
-        /// 키 이름을 Virtual Key Code로 변환합니다.
+        /// Convierte el nombre de la tecla a código de tecla virtual.
         /// </summary>
         private uint GetVirtualKeyCode(string keyName)
         {
-            // F1-F12 키
+            // Teclas F1-F12
             if (keyName.StartsWith("F") && keyName.Length > 1)
             {
                 if (
@@ -272,19 +272,19 @@ namespace TarkovClient.Utils
                 }
             }
 
-            // 알파벳 키
+            // Teclas alfabéticas
             if (keyName.Length == 1 && char.IsLetter(keyName[0]))
             {
                 return (uint)keyName.ToUpper()[0];
             }
 
-            // 숫자 키
+            // Teclas numéricas
             if (keyName.Length == 1 && char.IsDigit(keyName[0]))
             {
                 return (uint)keyName[0];
             }
 
-            // 특수 키들
+            // Teclas especiales
             return keyName.ToUpper() switch
             {
                 "SPACE" => 0x20,
@@ -306,7 +306,7 @@ namespace TarkovClient.Utils
         }
 
         /// <summary>
-        /// 모든 핫키 등록을 해제합니다.
+        /// Cancela el registro de todas las teclas rápidas.
         /// </summary>
         public void UnregisterAllHotkeys()
         {
@@ -330,7 +330,7 @@ namespace TarkovClient.Utils
         }
 
         /// <summary>
-        /// 키 문자열이 유효한지 검증합니다.
+        /// Verifica si la cadena de tecla es válida.
         /// </summary>
         public static bool IsValidKeyString(string keyString)
         {

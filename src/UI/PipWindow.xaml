@@ -17,7 +17,7 @@
 
     <!-- Window Resources -->
     <Window.Resources>
-        <!-- 투명 버튼 스타일 -->
+        <!-- Estilo de botón transparente -->
         <Style x:Key="TransparentButtonStyle" TargetType="Button">
             <Setter Property="Template">
                 <Setter.Value>
@@ -40,24 +40,24 @@
     </Window.Resources>
 
     <Grid>
-        <!-- WebView2 컨텐츠 (항상 표시) -->
+        <!-- Contenido WebView2 (siempre visible) -->
         <wv2:WebView2 x:Name="PipWebView"
                      DefaultBackgroundColor="Transparent"/>
 
-        <!-- 호버 시 제어 패널 (기본 숨김) -->
+        <!-- Panel de control al pasar el mouse (oculto por defecto) -->
         <Border x:Name="ControlOverlay"
                 Background="#80000000"
                 Opacity="0"
                 CornerRadius="8">
             <Grid>
-                <!-- 드래그 영역 (상단) -->
+                <!-- Área de arrastre (superior) -->
                 <Rectangle Fill="Transparent"
                           Height="30"
                           VerticalAlignment="Top"
                           MouseLeftButtonDown="DragArea_MouseDown"
                           Cursor="SizeAll"/>
 
-                <!-- 중앙 종료 버튼 -->
+                <!-- Botón de cierre central -->
                 <Button x:Name="CloseButton"
                         Width="40" Height="40"
                         HorizontalAlignment="Center"
@@ -70,7 +70,7 @@
                         Click="CloseButton_Click"
                         Style="{StaticResource TransparentButtonStyle}"/>
 
-                <!-- 크기 조절 핸들 (우하단) -->
+                <!-- Manija de cambio de tamaño (inferior derecha) -->
                 <Rectangle x:Name="ResizeHandle"
                           Fill="Transparent"
                           Width="15" Height="15"

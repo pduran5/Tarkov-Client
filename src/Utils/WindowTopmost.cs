@@ -6,12 +6,12 @@ using System.Windows.Interop;
 namespace TarkovClient.Utils
 {
     /// <summary>
-    /// Windows API를 사용한 강력한 최상단 유지 유틸리티
-    /// 시스템 레벨에서 창을 최상단에 고정하는 기능 제공
+    /// Utilidad robusta para mantener en primer plano usando API de Windows
+    /// Proporciona funcionalidad para fijar la ventana en primer plano a nivel del sistema
     /// </summary>
     public static class WindowTopmost
     {
-        // Windows API 상수
+        // Constantes de API de Windows
         private const int HWND_TOPMOST = -1;
         private const int HWND_NOTOPMOST = -2;
         private const uint SWP_NOMOVE = 0x0002;
@@ -23,7 +23,7 @@ namespace TarkovClient.Utils
         private const int SW_RESTORE = 9;
         private const int SW_SHOWNOACTIVATE = 4;
 
-        // Windows API 함수들
+        // Funciones de API de Windows
         [DllImport("user32.dll", SetLastError = true)]
         private static extern bool SetWindowPos(
             IntPtr hWnd,
@@ -51,11 +51,11 @@ namespace TarkovClient.Utils
         private static extern bool IsWindowVisible(IntPtr hWnd);
 
         /// <summary>
-        /// 창을 시스템 레벨에서 최상단으로 강제 고정
+        /// Forzar fijación de ventana en primer plano a nivel del sistema
         /// </summary>
-        /// <param name="window">대상 WPF 창</param>
-        /// <param name="activate">창을 활성화할지 여부</param>
-        /// <returns>성공 여부</returns>
+        /// <param name="window">Ventana WPF de destino</param>
+        /// <param name="activate">Si activar la ventana</param>
+        /// <returns>Éxito</returns>
         public static bool SetTopmost(Window window, bool activate = true)
         {
             try
@@ -82,10 +82,10 @@ namespace TarkovClient.Utils
         }
 
         /// <summary>
-        /// 창의 최상단 고정을 해제
+        /// Liberar fijación de ventana en primer plano
         /// </summary>
-        /// <param name="window">대상 WPF 창</param>
-        /// <returns>성공 여부</returns>
+        /// <param name="window">Ventana WPF de destino</param>
+        /// <returns>Éxito</returns>
         public static bool RemoveTopmost(Window window)
         {
             try
@@ -113,10 +113,10 @@ namespace TarkovClient.Utils
         }
 
         /// <summary>
-        /// 창 핸들 획득 (안전한 방식)
+        /// Obtener manejador de ventana (método seguro)
         /// </summary>
-        /// <param name="window">대상 WPF 창</param>
-        /// <returns>창 핸들 (실패 시 IntPtr.Zero)</returns>
+        /// <param name="window">Ventana WPF de destino</param>
+        /// <returns>Manejador de ventana (IntPtr.Zero si falla)</returns>
         private static IntPtr GetWindowHandle(Window window)
         {
             try

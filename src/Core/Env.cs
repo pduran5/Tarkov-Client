@@ -94,22 +94,22 @@ namespace TarkovClient
                 Env.ScreenshotsFolder = settings.screenshotsFolder ?? null;
             }
 
-            // AppSettings 객체를 내부적으로 저장
+            // Almacenar objeto AppSettings internamente
             _appSettings = settings;
         }
 
         public static AppSettings GetSettings()
         {
-            // 저장된 설정이 있으면 반환, 없으면 기본값으로 새로 생성
+            // Devolver configuración guardada si existe, de lo contrario crear nueva con valores predeterminados
             if (_appSettings != null)
             {
-                // 경로 정보는 현재 값으로 업데이트
+                // Actualizar información de ruta con valores actuales
                 _appSettings.gameFolder = Env.GameFolder;
                 _appSettings.screenshotsFolder = Env.ScreenshotsFolder;
                 return _appSettings;
             }
 
-            // 설정이 없으면 경고 - 이는 Settings.Load()가 호출되지 않은 경우
+            // Advertencia si no hay configuración - esto ocurre si no se llama a Settings.Load()
             return new AppSettings()
             {
                 gameFolder = Env.GameFolder,
@@ -123,7 +123,7 @@ namespace TarkovClient
             {
                 gameFolder = null,
                 screenshotsFolder = null,
-                // PiP 설정은 기본값으로 리셋
+                // Restablecer configuración de PiP a valores predeterminados
                 pipEnabled = true,
                 pipRememberPosition = true,
                 normalWidth = 1400,

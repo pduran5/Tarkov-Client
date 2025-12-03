@@ -6,7 +6,7 @@ namespace TarkovClientLogger
 
         public static void CheckTarkovClientInstallUsersCount() { }
 
-        // 디버그 로그 작성
+        // Escribir registro de depuración
         public static void WriteDebugLog(string message)
         {
             try

@@ -8,14 +8,14 @@
              Background="#FF000000">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
         <StackPanel Margin="20">
-            <!-- 제목 -->
-            <TextBlock Text="설정 (Setting)" 
+            <!-- Título -->
+            <TextBlock Text="Configuración (Setting)" 
                        FontSize="24" 
                        FontWeight="Bold" 
                        Foreground="White" 
                        Margin="0,0,0,20"/>
             
-            <!-- 통합 설정 섹션 (40:60 비율) -->
+            <!-- Sección de configuración integrada (proporción 40:60) -->
             <Border Background="#FF1A1A1A" 
                     CornerRadius="5" 
                     Padding="15" 
@@ -26,18 +26,18 @@
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
                     
-                    <!-- 왼쪽: 미니맵(PIP) 설정 (40%) -->
+                    <!-- Izquierda: Configuración de Minimapa (PIP) (40%) -->
                     <StackPanel Grid.Column="0" Margin="0,0,15,0">
-                        <TextBlock Text="미니맵(PIP) 설정" 
+                        <TextBlock Text="Configuración de Minimapa (PIP)" 
                                    FontSize="18" 
                                    FontWeight="Bold" 
                                    Foreground="White" 
                                    Margin="0,0,0,10"/>
                         
-                        <!-- PiP 전역 활성화 -->
+                        <!-- Activar PiP globalmente -->
                         <StackPanel Orientation="Vertical" Margin="0,5,0,10">
                             <CheckBox x:Name="GlobalPipEnabledCheckBox"
-                                      Content="미니맵(PIP) 활성화" 
+                                      Content="Activar Minimapa (PIP)" 
                                       Foreground="White" 
                                       FontSize="14"
                                       HorizontalAlignment="Left"
@@ -49,10 +49,10 @@
                                        Margin="20,2,0,0"/>
                         </StackPanel>
                         
-                        <!-- PiP 위치 기억 설정 -->
+                        <!-- Configuración de recordar posición PiP -->
                         <StackPanel Orientation="Vertical" Margin="0,5,0,10">
                             <CheckBox x:Name="PipRememberPositionCheckBox"
-                                      Content="미니맵(PIP) 화면 크기/위치 저장" 
+                                      Content="Guardar tamaño/posición de Minimapa (PIP)" 
                                       Foreground="White" 
                                       FontSize="14"
                                       HorizontalAlignment="Left"/>
@@ -62,10 +62,10 @@
                                        Margin="20,2,0,0"/>
                         </StackPanel>
                         
-                        <!-- PiP 핫키 설정 -->
+                        <!-- Configuración de tecla rápida PiP -->
                         <StackPanel Orientation="Vertical" Margin="0,5,0,10">
                             <CheckBox x:Name="PipHotkeyEnabledCheckBox"
-                                      Content="PiP 활성화 버튼 사용" 
+                                      Content="Usar botón de activación PiP" 
                                       Foreground="White" 
                                       FontSize="14"
                                       HorizontalAlignment="Left"
@@ -77,12 +77,12 @@
                                        Margin="20,2,0,0"/>
                         </StackPanel>
                         
-                        <!-- 핫키 입력 설정 -->
+                        <!-- Configuración de entrada de tecla rápida -->
                         <StackPanel x:Name="HotkeyInputPanel" 
                                     Orientation="Vertical" 
                                     Margin="20,5,0,10">
                             <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                <TextBlock Text="활성화 키:" 
+                                <TextBlock Text="Tecla de activación:" 
                                            Foreground="White" 
                                            VerticalAlignment="Center" 
                                            Margin="0,0,10,0"/>
@@ -131,56 +131,56 @@
                                     </Button.Style>
                                 </Button>
                             </StackPanel>
-                            <TextBlock Text="(클릭 후 키를 눌러 설정하세요)" 
+                            <TextBlock Text="(Haga clic y presione una tecla para configurar)" 
                                        Foreground="#FF888888" 
                                        FontSize="11"
                                        Margin="0,2,0,0"/>
                         </StackPanel>
                     </StackPanel>
                     
-                    <!-- 오른쪽: 맵 별 미니맵(PIP) 활성화 설정 (60%) -->
+                    <!-- Derecha: Configuración de activación de Minimapa (PIP) por mapa (60%) -->
                     <StackPanel Grid.Column="1" Margin="15,0,0,0">
-                        <TextBlock Text="맵 별 미니맵(PIP) 활성화 설정" 
+                        <TextBlock Text="Configuración de activación de Minimapa (PIP) por mapa" 
                                    FontSize="18" 
                                    FontWeight="Bold" 
                                    Foreground="White" 
                                    Margin="0,0,0,10"/>
                         
-                        <!-- 맵별 설정 리스트 -->
+                        <!-- Lista de configuración por mapa -->
                         <StackPanel x:Name="MapSettingsPanel">
-                            <!-- 맵별 설정이 동적으로 추가됩니다 -->
+                            <!-- La configuración por mapa se agrega dinámicamente -->
                         </StackPanel>
                     </StackPanel>
                 </Grid>
             </Border>
             
-            <!-- 프로그램 설정 섹션 -->
+            <!-- Sección de configuración del programa -->
             <Border Background="#FF1A1A1A" 
                     CornerRadius="5" 
                     Padding="15" 
                     Margin="0,0,0,15">
                 <StackPanel>
-                    <TextBlock Text="프로그램 설정" 
+                    <TextBlock Text="Configuración del programa" 
                                FontSize="18" 
                                FontWeight="Bold" 
                                Foreground="White" 
                                Margin="0,0,0,10"/>
                     
-                    <!-- 파일 자동 정리 설정 -->
-                    <TextBlock Text="파일 자동 정리" 
+                    <!-- Configuración de limpieza automática de archivos -->
+                    <TextBlock Text="Limpieza automática de archivos" 
                                FontSize="14" 
                                FontWeight="SemiBold" 
                                Foreground="White" 
                                Margin="0,10,0,10"/>
                     
-                    <!-- 로그 폴더 자동 정리 -->
+                    <!-- Limpieza automática de carpeta de registros -->
                     <StackPanel Orientation="Vertical" Margin="20,5,0,10">
                         <CheckBox x:Name="AutoDeleteLogsCheckBox"
-                                  Content="로그 폴더 자동 정리" 
+                                  Content="Limpieza automática de carpeta de registros" 
                                   Foreground="White" 
                                   FontSize="14"
                                   HorizontalAlignment="Left"/>
-                        <TextBlock Text="프로그램 시작 시 이전 로그 폴더를 자동으로 삭제합니다"
+                        <TextBlock Text="Elimina automáticamente la carpeta de registros anterior al iniciar el programa"
                                    Foreground="#FF888888"
                                    FontSize="11"
                                    Margin="20,2,0,0"/>
@@ -190,14 +190,14 @@
                                    Margin="20,2,0,0"/>
                     </StackPanel>
                     
-                    <!-- 스크린샷 자동 정리 -->
+                    <!-- Limpieza automática de capturas de pantalla -->
                     <StackPanel Orientation="Vertical" Margin="20,5,0,10">
                         <CheckBox x:Name="AutoDeleteScreenshotsCheckBox"
-                                  Content="스크린샷 자동 정리" 
+                                  Content="Limpieza automática de capturas de pantalla" 
                                   Foreground="White" 
                                   FontSize="14"
                                   HorizontalAlignment="Left"/>
-                        <TextBlock Text="레이드 종료 시 스크린샷을 자동으로 삭제합니다"
+                        <TextBlock Text="Elimina automáticamente las capturas de pantalla al finalizar la incursión"
                                    Foreground="#FF888888"
                                    FontSize="11"
                                    Margin="20,2,0,0"/>
@@ -209,12 +209,12 @@
                 </StackPanel>
             </Border>
             
-            <!-- 저장 버튼 -->
+            <!-- Botón Guardar -->
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Right" 
                         Margin="0,20,0,0">
                 <Button x:Name="SaveButton"
-                        Content="저장" 
+                        Content="Guardar" 
                         Width="100" 
                         Height="35" 
                         Background="#FF0066CC" 

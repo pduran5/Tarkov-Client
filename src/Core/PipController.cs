@@ -17,23 +17,23 @@ namespace TarkovClient
         private bool _isActive = false;
         private string _currentMap = null;
 
-        // 최상단 유지를 위한 타이머
+        // Temporizador para mantener en primer plano
         private DispatcherTimer _topmostTimer;
         private readonly object _timerLock = new object();
 
-        // 자동 복원 기능을 위한 상태 추적
+        // Seguimiento de estado para función de restauración automática
         private bool _elementsHidden = false;
         private double _lastKnownWidth = 0;
         private double _lastKnownHeight = 0;
 
-        // PiP 상태 추적을 위한 public 속성
+        // Propiedad pública para seguimiento de estado de PiP
         public bool IsActive => _isActive;
 
-        // 현재 맵 정보를 외부에서 접근할 수 있도록 하는 메서드
+        // Método para permitir acceso externo a la información del mapa actual
         public string GetCurrentMap() => _currentMap;
 
         /// <summary>
-        /// PiP 모드를 토글합니다 (활성화되어 있으면 비활성화, 비활성화되어 있으면 활성화)
+        /// Alterna el modo PiP (desactiva si está activo, activa si está inactivo)
         /// </summary>
         public void TogglePip()
         {
@@ -48,8 +48,8 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// PiP 창의 위치를 관리합니다 (최상단 ↔ 최소화/백그라운드 토글)
-        /// PiP 모드가 활성화된 상태에서만 동작
+        /// Gestiona la posición de la ventana PiP (alternar Primer plano ↔ Minimizar/Fondo)
+        /// Funciona solo cuando el modo PiP está activo
         /// </summary>
         public void TogglePipWindowPosition()
         {
@@ -62,14 +62,14 @@ namespace TarkovClient
             {
                 if (_mainWindow.WindowState == System.Windows.WindowState.Minimized)
                 {
-                    // 최소화 상태 → 복원 + 최상단 (포커스 변경 없이)
+                    // Estado minimizado → Restaurar + Primer plano (sin cambiar foco)
                     {
                         Utils.WindowTopmost.SetTopmost(_mainWindow);
                     }
                 }
                 else
                 {
-                    // 최상단 상태 → 최소화
+                    // Estado en primer plano → Minimizar
                     Utils.WindowTopmost.RemoveTopmost(_mainWindow);
                     _mainWindow.WindowState = System.Windows.WindowState.Minimized;
                 }
@@ -83,12 +83,12 @@ namespace TarkovClient
             _instance = this;
         }
 
-        // 맵 변경 시 호출 (1차 트리거)
+        // Llamado al cambiar mapa (1er disparador)
         public void OnMapChanged(string mapName)
         {
             _currentMap = mapName;
 
-            // PiP 기능이 활성화되어 있을 때만 ShowPip 호출
+            // Llamar a ShowPip solo cuando la función PiP está activa
             var settings = Env.GetSettings();
             if (settings.pipEnabled)
             {
@@ -102,7 +102,7 @@ namespace TarkovClient
             else { }
         }
 
-        // 스크린샷 생성 시 호출 (2차 트리거)
+        // Llamado al crear captura de pantalla (2do disparador)
         public void OnScreenshotTaken()
         {
             if (_isActive)
@@ -113,26 +113,26 @@ namespace TarkovClient
             ShowPip();
         }
 
-        // PiP 모드 표시 (메인윈도우 크기 조절 방식)
+        // Mostrar modo PiP (método de cambio de tamaño de ventana principal)
         public async void ShowPip()
         {
-            // 설정 정보 가져오기
+            // Obtener información de configuración
             var settings = Env.GetSettings();
 
             try
             {
-                // 처음 활성화하는 경우에만 일반 모드 설정 저장 및 초기화
+                // Guardar e inicializar configuración de modo normal solo en la primera activación
                 if (!_isActive)
                 {
                     SaveNormalModeSettings();
 
                     _isActive = true;
 
-                    // 창 크기 변경 이벤트 핸들러 등록
+                    // Registrar manejador de eventos de cambio de tamaño de ventana
                     RegisterSizeChangedHandler();
                 }
 
-                // 첫 번째 탭으로 자동 전환
+                // Cambio automático a la primera pestaña
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(() =>
                 {
                     try
@@ -151,7 +151,7 @@ namespace TarkovClient
 
                 await Task.Delay(500);
 
-                // 웹 요소 제거 및 지도 스케일링 (전체 화면에서) - UI 스레드에서 실행
+                // Eliminar elementos web y escalar mapa (en pantalla completa) - Ejecutar en hilo UI
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
                 {
                     await ExecuteElementRemovalAndMapScaling();
@@ -159,7 +159,7 @@ namespace TarkovClient
 
                 await Task.Delay(500);
 
-                // 초기 상태 설정 (요소들이 숨김 상태로 시작)
+                // Configuración de estado inicial (elementos comienzan ocultos)
                 _elementsHidden = true;
 
                 await ApplyPipModeSettings();
@@ -172,7 +172,7 @@ namespace TarkovClient
             }
         }
 
-        // PiP 모드 해제 (메인윈도우 일반 모드 복원)
+        // Desactivar modo PiP (restaurar modo normal de ventana principal)
         public void HidePip()
         {
             if (!_isActive)
@@ -182,17 +182,17 @@ namespace TarkovClient
             {
                 _isActive = false;
 
-                // 창 크기 변경 이벤트 핸들러 제거
+                // Eliminar manejador de eventos de cambio de tamaño de ventana
                 UnregisterSizeChangedHandler();
 
-                // 상태 초기화
+                // Inicializar estado
                 _elementsHidden = false;
                 _lastKnownWidth = 0;
                 _lastKnownHeight = 0;
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    // 1. 일반 모드 크기 및 위치 복원
+                    // 1. Restaurar tamaño y posición de modo normal
                     var settings = Env.GetSettings();
                     _mainWindow.Width = settings.normalWidth;
                     _mainWindow.Height = settings.normalHeight;
@@ -207,37 +207,37 @@ namespace TarkovClient
                         _mainWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
                     }
 
-                    // 2. 최소 크기 제한 복원
+                    // 2. Restaurar límite de tamaño mínimo
                     _mainWindow.MinWidth = 1000;
                     _mainWindow.MinHeight = 700;
 
-                    // 3. 타이틀바 및 리사이즈 모드 복원
+                    // 3. Restaurar barra de título y modo de cambio de tamaño
                     _mainWindow.WindowStyle = WindowStyle.SingleBorderWindow;
                     _mainWindow.ResizeMode = ResizeMode.CanResize;
 
-                    // 4. 최상위 해제 (WPF + Win32 API)
+                    // 4. Desactivar primer plano (WPF + Win32 API)
                     _mainWindow.Topmost = false;
                     WindowTopmost.RemoveTopmost(_mainWindow);
                 });
 
-                // JavaScript로 제거된 요소들 복원
+                // Restaurar elementos eliminados por JavaScript
                 RestorePipJavaScriptActions();
 
-                // PiP 모드 UI 해제
+                // Desactivar UI de modo PiP
                 RestoreNormalModeSettings();
             }
             catch (Exception) { }
         }
 
-        // 맵 컨텐츠 업데이트
+        // Actualizar contenido del mapa
         public void UpdateMapContent(string mapName)
         {
             _currentMap = mapName;
-            // WebView2에서 맵이 자동으로 동기화됨 (WebSocket 통신)
+            // El mapa se sincroniza automáticamente en WebView2 (comunicación WebSocket)
         }
 
         /// <summary>
-        /// 창 크기 변경 이벤트 핸들러 등록
+        /// Registrar manejador de eventos de cambio de tamaño de ventana
         /// </summary>
         private void RegisterSizeChangedHandler()
         {
@@ -251,12 +251,12 @@ namespace TarkovClient
             catch (Exception) { }
         }
 
-        // 웹 요소 제거 및 지도 스케일링
+        // Eliminar elementos web y escalar mapa
         private async Task ExecuteElementRemovalAndMapScaling()
         {
             try
             {
-                // 현재 활성 탭의 WebView2 가져오기 (UI 스레드에서 실행)
+                // Obtener WebView2 de la pestaña activa actual (ejecutar en hilo UI)
                 Microsoft.Web.WebView2.Wpf.WebView2 activeWebView = null;
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -268,12 +268,12 @@ namespace TarkovClient
                     return;
                 }
 
-                // 0. 기존 PiP 오버레이 제거 (맵 변경 시 중복 방지)
+                // 0. Eliminar superposición PiP existente (prevenir duplicados al cambiar mapa)
                 await activeWebView.CoreWebView2.ExecuteScriptAsync(
                     JavaScriptConstants.REMOVE_PIP_OVERLAY_SCRIPT
                 );
 
-                // 1. 지도 스케일링 (#map) - 맵별 설정 적용
+                // 1. Escalado de mapa (#map) - Aplicar configuración por mapa
                 var settings = Env.GetSettings();
                 string transformMatrix = GetMapTransform(settings, _currentMap);
 
@@ -290,27 +290,27 @@ namespace TarkovClient
                 "
                 );
 
-                // 우측 판넬 제거
+                // Eliminar panel derecho
                 await activeWebView.CoreWebView2.ExecuteScriptAsync(
                     JavaScriptConstants.REMOVE_TARKOV_MARGET_ELEMENT_PANNEL_RIGHT
                 );
 
-                // 좌측 판넬 제거
+                // Eliminar panel izquierdo
                 await activeWebView.CoreWebView2.ExecuteScriptAsync(
                     JavaScriptConstants.REMOVE_TARKOV_MARGET_ELEMENT_PANNEL_LEFT
                 );
 
-                // 3. 특정 요소 숨김 (panel_top)
+                // 3. Ocultar elementos específicos (panel_top)
                 await activeWebView.CoreWebView2.ExecuteScriptAsync(
                     JavaScriptConstants.REMOVE_TARKOV_MARGET_ELEMENT_PANNEL_TOP
                 );
 
-                // 4. header 요소 숨김 처리 (display: none)
+                // 4. Ocultar elemento header (display: none)
                 await activeWebView.CoreWebView2.ExecuteScriptAsync(
                     JavaScriptConstants.REMOVE_TARKOV_MARGET_ELEMENT_HEADER
                 );
 
-                // 5. footer-wrap 요소 숨김
+                // 5. Ocultar elemento footer-wrap
                 await activeWebView.CoreWebView2.ExecuteScriptAsync(
                     JavaScriptConstants.REMOVE_TARKOV_MARGET_ELEMENT_FOOTER
                 );
@@ -318,7 +318,7 @@ namespace TarkovClient
             catch (Exception) { }
         }
 
-        // PiP 모드 UI 설정 적용
+        // Aplicar configuración de UI de modo PiP
         private async Task ApplyPipModeSettings()
         {
             try
@@ -327,10 +327,10 @@ namespace TarkovClient
 
                 await System.Windows.Application.Current.Dispatcher.InvokeAsync(async () =>
                 {
-                    // 현재 활성 WebView2 가져오기
+                    // Obtener WebView2 activo actual
                     var activeWebView = GetActiveWebView();
 
-                    // 탭 사이드바 숨김 처리 및 TabControl 확장
+                    // Ocultar barra lateral de pestañas y expandir TabControl
                     var tabSidebar =
                         _mainWindow.FindName("TabSidebar") as System.Windows.Controls.Border;
                     var tabContainer =
@@ -341,29 +341,29 @@ namespace TarkovClient
                         tabSidebar.Visibility = Visibility.Collapsed;
                     }
 
-                    // TabContainer를 전체 너비로 확장 및 헤더 영역 숨김
+                    // Expandir TabContainer al ancho completo y ocultar área de encabezado
                     if (tabContainer != null)
                     {
                         System.Windows.Controls.Grid.SetColumn(tabContainer, 0);
                         System.Windows.Controls.Grid.SetColumnSpan(tabContainer, 2);
 
-                        // 헤더 영역을 화면 위로 밀어서 숨김 (헤더 높이 약 30px)
+                        // Empujar área de encabezado hacia arriba para ocultar (altura de encabezado aprox. 30px)
                         tabContainer.Margin = new System.Windows.Thickness(0, -30, 0, 0);
 
-                        // PiP 모드에서 Z-Index를 더 낮게 설정 (호버 영역이 위에 오도록)
+                        // Establecer Z-Index más bajo en modo PiP (para que el área de hover esté encima)
                         System.Windows.Controls.Panel.SetZIndex(tabContainer, 10);
                     }
 
-                    // TabContainer의 Z-Index를 낮춤
+                    // Bajar Z-Index de TabContainer
                     if (tabContainer != null)
                     {
                         System.Windows.Controls.Panel.SetZIndex(tabContainer, 50);
                     }
 
-                    // JavaScript 기반 PiP 오버레이 생성 (검증 및 재시도 포함)
+                    // Crear superposición PiP basada en JavaScript (incluye verificación y reintento)
                     if (activeWebView != null && activeWebView.CoreWebView2 != null)
                     {
-                        // 오버레이 생성
+                        // Crear superposición
                         await activeWebView.CoreWebView2.ExecuteScriptAsync(
                             JavaScriptConstants.CREATE_PIP_OVERLAY_SCRIPT
                         );
@@ -388,7 +388,7 @@ namespace TarkovClient
                             "
                             );
 
-                        // 검증 실패 시 재시도
+                        // Reintentar si falla la verificación
                         var verification = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(
                             verificationResult
                         );
@@ -398,14 +398,14 @@ namespace TarkovClient
                             || !verification.webAreaExists
                         )
                         {
-                            // 기존 오버레이 완전 제거
+                            // Eliminar completamente superposición existente
                             await activeWebView.CoreWebView2.ExecuteScriptAsync(
                                 JavaScriptConstants.REMOVE_PIP_OVERLAY_SCRIPT
                             );
 
                             await Task.Delay(200);
 
-                            // 재생성
+                            // Regenerar
                             await activeWebView.CoreWebView2.ExecuteScriptAsync(
                                 JavaScriptConstants.CREATE_PIP_OVERLAY_SCRIPT
                             );
@@ -416,7 +416,7 @@ namespace TarkovClient
             catch (Exception) { }
         }
 
-        // PiP 모드 창 크기/위치 설정 적용
+        // Aplicar configuración de tamaño/posición de ventana de modo PiP
         private void ApplyPipWindowSettings()
         {
             try
@@ -425,20 +425,20 @@ namespace TarkovClient
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    // 1. 최소 크기 제한 임시 해제
+                    // 1. Liberar temporalmente límite de tamaño mínimo
                     _mainWindow.MinWidth = 200;
                     _mainWindow.MinHeight = 150;
 
-                    // 2. 타이틀바 제거 및 리사이즈 모드 설정
+                    // 2. Eliminar barra de título y configurar modo de cambio de tamaño
                     _mainWindow.WindowStyle = WindowStyle.None;
                     _mainWindow.ResizeMode = ResizeMode.CanResize;
 
-                    // 3. PiP 크기 및 위치 설정 - 맵별 설정 적용
+                    // 3. Configurar tamaño y posición de PiP - Aplicar configuración por mapa
                     var mapSetting = GetMapSetting(settings, _currentMap);
                     _mainWindow.Width = mapSetting.width;
                     _mainWindow.Height = mapSetting.height;
 
-                    // 4. 위치 설정 - 맵별 설정 적용
+                    // 4. Configurar posición - Aplicar configuración por mapa
                     if (mapSetting.left >= 0 && mapSetting.top >= 0)
                     {
                         _mainWindow.Left = mapSetting.left;
@@ -446,26 +446,26 @@ namespace TarkovClient
                     }
                     else
                     {
-                        // 기본 위치: 화면 우하단
+                        // Posición predeterminada: Inferior derecha de la pantalla
                         _mainWindow.Left =
                             SystemParameters.PrimaryScreenWidth - mapSetting.width - 0;
                         _mainWindow.Top =
                             SystemParameters.PrimaryScreenHeight - mapSetting.height - 80;
                     }
 
-                    // 5. 최상단 설정 적용 (핫키와 동일한 방식으로 통일)
+                    // 5. Aplicar configuración de primer plano (unificado con el mismo método que la tecla rápida)
                     bool topmostResult = WindowTopmost.SetTopmost(_mainWindow);
                 });
             }
             catch (Exception) { }
         }
 
-        // PiP 모드 해제 시 JavaScript로 제거된 요소들 복원
+        // Restaurar elementos eliminados por JavaScript al desactivar modo PiP
         private async void RestorePipJavaScriptActions()
         {
             try
             {
-                // 현재 활성 탭의 WebView2 가져오기 (UI 스레드에서 실행)
+                // Obtener WebView2 de la pestaña activa actual (ejecutar en hilo UI)
                 Microsoft.Web.WebView2.Wpf.WebView2 activeWebView = null;
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -477,7 +477,7 @@ namespace TarkovClient
                     return;
                 }
 
-                // Tarkov Market(Tarkov Pilot 제거 요소 복원)
+                // Restaurar elementos eliminados de Tarkov Market (Tarkov Pilot)
                 await activeWebView.CoreWebView2.ExecuteScriptAsync(
                     JavaScriptConstants.TARKOV_MARGET_ELEMENT_RESTORE
                 );
@@ -485,7 +485,7 @@ namespace TarkovClient
             catch (Exception) { }
         }
 
-        // 현재 활성 탭의 WebView2 가져오기
+        // Obtener WebView2 de la pestaña activa actual
         private Microsoft.Web.WebView2.Wpf.WebView2 GetActiveWebView()
         {
             try
@@ -496,7 +496,7 @@ namespace TarkovClient
                     is System.Windows.Controls.TabItem selectedTab
                 )
                 {
-                    // MainWindow의 _tabWebViews 딕셔너리에서 WebView2 가져오기
+                    // Obtener WebView2 del diccionario _tabWebViews de MainWindow
                     var webViewField = typeof(MainWindow).GetField(
                         "_tabWebViews",
                         System.Reflection.BindingFlags.NonPublic
@@ -526,7 +526,7 @@ namespace TarkovClient
             }
         }
 
-        // 일반 모드 설정 저장
+        // Guardar configuración de modo normal
         private void SaveNormalModeSettings()
         {
             try
@@ -547,12 +547,12 @@ namespace TarkovClient
             catch (Exception) { }
         }
 
-        // 일반 모드 UI 설정 복원
+        // Restaurar configuración de UI de modo normal
         private async void RestoreNormalModeSettings()
         {
             try
             {
-                // JavaScript PiP 오버레이 제거 (UI 스레드 외부에서 실행)
+                // Eliminar superposición PiP de JavaScript (ejecutar fuera del hilo UI)
                 var activeWebView = GetActiveWebView();
                 if (activeWebView != null && activeWebView.CoreWebView2 != null)
                 {
@@ -563,7 +563,7 @@ namespace TarkovClient
 
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
-                    // 탭 사이드바 복원 및 TabControl 원래 위치로 복원
+                    // Restaurar barra lateral de pestañas y restaurar TabControl a posición original
                     var tabSidebar =
                         _mainWindow.FindName("TabSidebar") as System.Windows.Controls.Border;
                     var tabContainer =
@@ -574,16 +574,16 @@ namespace TarkovClient
                         tabSidebar.Visibility = Visibility.Visible;
                     }
 
-                    // TabContainer를 원래 위치로 복원 및 헤더 영역 복원
+                    // Restaurar TabContainer a posición original y restaurar área de encabezado
                     if (tabContainer != null)
                     {
                         System.Windows.Controls.Grid.SetColumn(tabContainer, 1);
                         System.Windows.Controls.Grid.SetColumnSpan(tabContainer, 1);
 
-                        // 헤더 영역 복원 (Margin 초기화)
+                        // Restaurar área de encabezado (inicializar Margin)
                         tabContainer.Margin = new System.Windows.Thickness(0, 0, 0, 0);
 
-                        // Z-Index를 원래대로 복원
+                        // Restaurar Z-Index a original
                         System.Windows.Controls.Panel.SetZIndex(tabContainer, 100);
                     }
                 });
@@ -591,7 +591,7 @@ namespace TarkovClient
             catch (Exception) { }
         }
 
-        // 맵별 Transform 값 가져오기
+        // Obtener valor Transform por mapa
         private string GetMapTransform(AppSettings settings, string mapName)
         {
             if (string.IsNullOrEmpty(mapName))
@@ -599,7 +599,7 @@ namespace TarkovClient
                 return MapTransformCalculator.CalculateFactoryMapTransform(300, 250);
             }
 
-            // 맵별 설정에서 transform 값 확인
+            // Verificar valor transform en configuración por mapa
             if (settings.mapSettings != null && settings.mapSettings.ContainsKey(mapName))
             {
                 var mapSetting = settings.mapSettings[mapName];
@@ -609,11 +609,11 @@ namespace TarkovClient
                 }
             }
 
-            // 저장된 transform이 없으면 기본값 사용 (현재는 Factory 계산식)
+            // Si no hay transform guardado, usar valor predeterminado (actualmente fórmula de Factory)
             return MapTransformCalculator.CalculateFactoryMapTransform(300, 250);
         }
 
-        // 맵별 설정 가져오기
+        // Obtener configuración por mapa
         private MapSetting GetMapSetting(AppSettings settings, string mapName)
         {
             if (string.IsNullOrEmpty(mapName))
@@ -621,13 +621,13 @@ namespace TarkovClient
                 return new MapSetting();
             }
 
-            // 맵별 설정 확인
+            // Verificar configuración por mapa
             if (settings.mapSettings != null && settings.mapSettings.ContainsKey(mapName))
             {
                 return settings.mapSettings[mapName];
             }
 
-            // 저장된 설정이 없으면 기본값으로 새로 생성하고 저장
+            // Si no hay configuración guardada, crear nueva con valores predeterminados y guardar
             var defaultSetting = new MapSetting();
             if (settings.mapSettings == null)
             {
@@ -644,7 +644,7 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 창 크기 변경 이벤트 핸들러 제거
+        /// Eliminar manejador de eventos de cambio de tamaño de ventana
         /// </summary>
         private void UnregisterSizeChangedHandler()
         {
@@ -659,26 +659,26 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 창 크기 변경 이벤트 핸들러
+        /// Manejador de eventos de cambio de tamaño de ventana
         /// </summary>
         private async void OnWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
             try
             {
-                // PiP 모드가 아니면 처리하지 않음
+                // No procesar si no está en modo PiP
                 if (!_isActive)
                     return;
 
                 var settings = Env.GetSettings();
 
-                // 자동 복원 기능이 비활성화되어 있으면 처리하지 않음
+                // No procesar si la función de restauración automática está desactivada
                 if (!settings.enableAutoRestore)
                     return;
 
                 double currentWidth = e.NewSize.Width;
                 double currentHeight = e.NewSize.Height;
 
-                // 이전과 같은 크기면 처리하지 않음 (불필요한 처리 방지)
+                // No procesar si el tamaño es igual al anterior (prevenir procesamiento innecesario)
                 if (
                     Math.Abs(currentWidth - _lastKnownWidth) < 1
                     && Math.Abs(currentHeight - _lastKnownHeight) < 1
@@ -688,10 +688,10 @@ namespace TarkovClient
                 _lastKnownWidth = currentWidth;
                 _lastKnownHeight = currentHeight;
 
-                // 현재 크기가 임계값 이상인지 확인
+                // Verificar si el tamaño actual es mayor o igual al umbral
                 bool isLargeSize = IsLargeSize(currentWidth, currentHeight, settings);
 
-                // 상태 변화가 있을 때만 JavaScript 실행
+                // Ejecutar JavaScript solo cuando hay cambio de estado
                 if (isLargeSize && _elementsHidden)
                 {
                     await RestoreElementsForLargeSize();
@@ -708,7 +708,7 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 현재 창 크기가 임계값 이상인지 확인
+        /// Verificar si el tamaño actual de la ventana es mayor o igual al umbral
         /// </summary>
         private bool IsLargeSize(double width, double height, AppSettings settings)
         {
@@ -717,13 +717,13 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 큰 크기일 때 요소들을 복원
+        /// Restaurar elementos cuando el tamaño es grande
         /// </summary>
         private async Task RestoreElementsForLargeSize()
         {
             try
             {
-                // 현재 활성 탭의 WebView2 가져오기
+                // Obtener WebView2 de la pestaña activa actual
                 Microsoft.Web.WebView2.Wpf.WebView2 activeWebView = null;
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -735,7 +735,7 @@ namespace TarkovClient
                     return;
                 }
 
-                // JavaScript로 요소 복원
+                // Restaurar elementos con JavaScript
                 await activeWebView.CoreWebView2.ExecuteScriptAsync(
                     JavaScriptConstants.RESTORE_ELEMENTS_FOR_LARGE_SIZE
                 );
@@ -744,13 +744,13 @@ namespace TarkovClient
         }
 
         /// <summary>
-        /// 작은 크기일 때 요소들을 숨김
+        /// Ocultar elementos cuando el tamaño es pequeño
         /// </summary>
         private async Task HideElementsForSmallSize()
         {
             try
             {
-                // 현재 활성 탭의 WebView2 가져오기
+                // Obtener WebView2 de la pestaña activa actual
                 Microsoft.Web.WebView2.Wpf.WebView2 activeWebView = null;
                 System.Windows.Application.Current.Dispatcher.Invoke(() =>
                 {
@@ -762,7 +762,7 @@ namespace TarkovClient
                     return;
                 }
 
-                // JavaScript로 요소 숨김
+                // Ocultar elementos con JavaScript
                 await activeWebView.CoreWebView2.ExecuteScriptAsync(
                     JavaScriptConstants.HIDE_ELEMENTS_FOR_SMALL_SIZE
                 );

@@ -1,12 +1,12 @@
 namespace TarkovClient.Constants
 {
     /// <summary>
-    /// WebView2에서 사용되는 JavaScript 스크립트 상수들
+    /// Constantes de script JavaScript utilizadas en WebView2
     /// </summary>
     public static class JavaScriptConstants
     {
         /// <summary>
-        /// 불필요한 UI 요소를 제거하는 스크립트
+        /// Script para eliminar elementos de UI innecesarios
         /// </summary>
         public const string REMOVE_UNWANTED_ELEMENTS_SCRIPT =
             @"
@@ -15,10 +15,10 @@ namespace TarkovClient.Constants
                     
                     function applyCustomizations() {
                         try {
-                            // 이미 처리된 경우 중복 실행 방지
+                            // Evitar ejecución duplicada si ya se ha procesado
                             if (isProcessed) return;
                             
-                            // 페이지 하단 요소들 제거
+                            // Eliminar elementos inferiores de la página
                             var panelTopElement = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_top > div > div.d-flex.ml-15.fs-0');
                             if (panelTopElement) {
                                 panelTopElement.remove();
@@ -49,7 +49,7 @@ namespace TarkovClient.Constants
                                 pRelativeSpanElement.remove();
                             }
                             
-                            // p-relative 내부 요소는 숨김으로만 처리
+                            // Los elementos internos de p-relative solo se ocultan
                             var pRelativeElement = document.querySelector('#__nuxt > div > div > div.p-relative > a > div:nth-child(3)');
                             if (pRelativeElement) {
                                 pRelativeElement.style.display = 'none';
@@ -60,7 +60,7 @@ namespace TarkovClient.Constants
                                 pilotStatusElement.style.display = 'none';
                             }
                             
-                            // ::before 가상 요소 제거
+                            // Eliminar pseudo-elemento ::before
                             var beforeTargetElement = document.querySelector('#__nuxt > div > div > header > div:nth-child(3) > div > div');
                             if (beforeTargetElement) {
                                 beforeTargetElement.style.position = 'relative';
@@ -87,9 +87,9 @@ namespace TarkovClient.Constants
                             if (brandContainer) {
                                 var originalTitle = brandContainer.querySelector('div.title > a');
                                 
-                                // 이미 커스터마이징되었는지 확인
+                                // Verificar si ya está personalizado
                                 if (!brandContainer.querySelector('.tarkov-client-separator')) {
-                                    // 구분자 추가
+                                    // Agregar separador
                                     var separator = document.createElement('span');
                                     separator.className = 'tarkov-client-separator';
                                     separator.textContent = ' | ';
@@ -108,7 +108,7 @@ namespace TarkovClient.Constants
                                         clientLink.style.fontWeight = computedStyle.fontWeight;
                                         clientLink.style.color = computedStyle.color;
                                         
-                                        // 구분자도 같은 스타일 적용
+                                        // Aplicar el mismo estilo al separador
                                         separator.style.fontFamily = computedStyle.fontFamily;
                                         separator.style.fontSize = computedStyle.fontSize;
                                         separator.style.color = computedStyle.color;
@@ -129,11 +129,11 @@ namespace TarkovClient.Constants
                                     headerContainer.style.cssText = 'display: flex; justify-content: space-between; align-items: center; width: 100%; box-sizing: border-box; overflow: visible; padding: 0 20px; position: relative;';
                                 }
                                 
-                                // p-relative 컨테이너는 드롭다운 위치를 위해 유지하고, 내부 요소만 숨김
+                                // Mantener contenedor p-relative para posición de menú desplegable, ocultar solo elementos internos
                                 if (tarkovPilotElement) {
                                     var pRelativeContainer = tarkovPilotElement.closest('.p-relative');
                                     if (pRelativeContainer) {
-                                        // 컨테이너는 유지하되 내부 링크만 숨김
+                                        // Mantener contenedor pero ocultar enlace interno
                                         tarkovPilotElement.style.display = 'none';
                                     }
                                 }
@@ -156,16 +156,16 @@ namespace TarkovClient.Constants
                         } catch { }
                     }
                     
-                    // 초기 커스터마이징 적용
+                    // Aplicar personalización inicial
                     applyCustomizations();
                     
-                    // MutationObserver로 DOM 변경 감시
+                    // Observar cambios en DOM con MutationObserver
                     const observer = new MutationObserver(function(mutations) {
                         let shouldReapply = false;
                         
                         mutations.forEach(function(mutation) {
                             if (mutation.type === 'childList') {
-                                // 중요한 요소가 다시 추가되었는지 확인
+                                // Verificar si se han vuelto a agregar elementos importantes
                                 mutation.addedNodes.forEach(function(node) {
                                     if (node.nodeType === 1) { // Element node
                                         if (node.matches && (
@@ -197,7 +197,7 @@ namespace TarkovClient.Constants
                         }
                     });
                     
-                    // body 전체를 감시
+                    // Observar todo el body
                     observer.observe(document.body, {
                         childList: true,
                         subtree: true
@@ -206,14 +206,14 @@ namespace TarkovClient.Constants
                 })();";
 
         /// <summary>
-        /// 방향 표시기를 추가하는 스크립트
+        /// Script para agregar indicadores de dirección
         /// </summary>
         public const string ADD_DIRECTION_INDICATORS_SCRIPT =
             @"
                 (function () {
                     'use strict';
 
-                    // 사용자가 제공한 SVG 데이터 URL 직접 사용
+                    // Usar directamente URL de datos SVG proporcionada por el usuario
                     const svgDataUrl = 'data:image/svg+xml;utf8,%0A%20%20%20%20%20%20%20%20%20%20%20%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M50%2C5%20L85%2C75%20Q50%2C45%2015%2C75%20Z%22%20fill%3D%22%238a2be2%22%20stroke%3D%22%2370a800%22%20stroke-width%3D%222%22%2F%3E%0A%20%20%20%20%20%20%20%20%20%20%20%20%3C%2Fsvg%3E';
 
                     function injectStyle() {
@@ -249,7 +249,7 @@ namespace TarkovClient.Constants
                         const triangle = document.createElement('div');
                         triangle.className = 'triangle-indicator';
 
-                        // 마커가 relative position을 가지도록 설정
+                        // Configurar marcador para tener posición relativa
                         marker.style.position = 'relative';
 
                         const computed = window.getComputedStyle(marker);
@@ -269,7 +269,7 @@ namespace TarkovClient.Constants
                     function initMarkers() {
                         const markers = document.querySelectorAll('.marker');
                         if (markers.length === 0) {
-                            // .marker가 없으면 다른 선택자 시도
+                            // Si no existe .marker, intentar otro selector
                             const altMarkers = document.querySelectorAll('#map > div');
                             altMarkers.forEach(addTriangleToMarker);
                         } else {
@@ -301,29 +301,29 @@ namespace TarkovClient.Constants
                         subtree: true,
                     });
 
-                    // 2초 후에 마커 초기화 시도
+                    // Intentar inicializar marcadores después de 2 segundos
                     setTimeout(initMarkers, 2000);
                 })();";
 
         /// <summary>
-        /// PiP 모드용 오버레이 생성 스크립트 (키보드 입력 차단 문제 해결)
+        /// Script de creación de superposición para modo PiP (solución a problema de bloqueo de entrada de teclado)
         /// </summary>
         public const string CREATE_PIP_OVERLAY_SCRIPT =
             @"
                 (function() {
                     'use strict';
                     
-                    // 기존 PiP 요소들 제거
+                    // Eliminar elementos PiP existentes
                     const existingControlBar = document.getElementById('pip-control-bar');
                     if (existingControlBar) {
                         existingControlBar.remove();
                     }
                     
-                    // 기존 스타일 제거
+                    // Eliminar estilos existentes
                     const existingStyle = document.getElementById('pip-control-style');
                     if (existingStyle) existingStyle.remove();
                     
-                    // 상단 컨트롤 바만 생성 (전체 화면 오버레이 제거)
+                    // Crear solo barra de control superior (eliminar superposición de pantalla completa)
                     const controlBar = document.createElement('div');
                     controlBar.id = 'pip-control-bar';
                     controlBar.style.cssText = `
@@ -341,7 +341,7 @@ namespace TarkovClient.Constants
                         border-bottom: 1px solid transparent !important;
                     `;
                     
-                    // 창이동  영역 (80%) - 실제 텍스트 콘텐츠 추가
+                    // Área de movimiento de ventana (80%) - Agregar contenido de texto real
                     const dragArea = document.createElement('div');
                     dragArea.id = 'pip-drag-area';
                     dragArea.innerHTML = '';
@@ -360,7 +360,7 @@ namespace TarkovClient.Constants
                         background: transparent !important;
                     `;
                     
-                    // 종료 버튼 영역 (20%) - 실제 텍스트 콘텐츠 추가
+                    // Área de botón de salida (20%) - Agregar contenido de texto real
                     const exitArea = document.createElement('div');
                     exitArea.id = 'pip-exit-area';
                     exitArea.innerHTML = '';
@@ -379,7 +379,7 @@ namespace TarkovClient.Constants
                         border-left: 1px solid transparent !important;
                     `;
                     
-                    // 스타일 추가
+                    // Agregar estilo
                     const style = document.createElement('style');
                     style.id = 'pip-control-style';
                     style.textContent = `
@@ -407,10 +407,10 @@ namespace TarkovClient.Constants
 
                     document.head.appendChild(style);
                     
-                    // 창이동 기능 구현 (WPF DragMove 방식)
+                    // Implementar función de movimiento de ventana (método WPF DragMove)
                     dragArea.addEventListener('mousedown', function(e) {
                         
-                        // WPF로 창이동 시작 알림
+                        // Notificar inicio de movimiento de ventana a WPF
                         const dragStartMessage = {
                             type: 'pip-drag-start'
                         };
@@ -422,7 +422,7 @@ namespace TarkovClient.Constants
                         e.preventDefault();
                     });
                     
-                    // 종료 기능 구현
+                    // Implementar función de salida
                     exitArea.addEventListener('click', function() {
                         const message = {
                             type: 'pip-exit'
@@ -432,14 +432,14 @@ namespace TarkovClient.Constants
                         } catch {}
                     });
                     
-                    // 컨트롤 바 조립
+                    // Ensamblar barra de control
                     controlBar.appendChild(dragArea);
                     controlBar.appendChild(exitArea);
 
                     document.body.appendChild(controlBar);
                     
                     function showControls() {
-                        dragArea.innerHTML = '⋮⋮⋮ 창 이동';
+                        dragArea.innerHTML = '⋮⋮⋮ Mover ventana';
                         exitArea.innerHTML = 'X';
                     }
                     
@@ -448,7 +448,7 @@ namespace TarkovClient.Constants
                         exitArea.innerHTML = '';
                     }
 
-                    // 컨트롤 영역 호버 시 텍스트 변경
+                    // Cambiar texto al pasar el mouse sobre área de control
                     controlBar.addEventListener('mouseenter', function() {
                         showControls();
                     });
@@ -457,7 +457,7 @@ namespace TarkovClient.Constants
                         hideControls();
                     });
                     
-                    // 마우스 움직임 감지로 컨트롤 표시 (디버깅 로그 추가)
+                    // Mostrar controles al detectar movimiento del mouse (agregar registro de depuración)
                     document.addEventListener('mousemove', function(e) {
                         try {
                             const level3Element = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_right > div.d-flex.h-space-between.layers.mb-15 > div:nth-child(1) > div:nth-child(2)');
@@ -470,7 +470,7 @@ namespace TarkovClient.Constants
                         hideControls();
                     });
                     
-                    // 맵 설정 저장 기능
+                    // Función de guardado de configuración de mapa
                     function saveMapSettings() {
                         try {
                             const mapElement = document.querySelector('#map');
@@ -483,7 +483,7 @@ namespace TarkovClient.Constants
                         } catch {}
                     }
                     
-                    // 윈도우 포커스 해제 시 맵 설정 저장
+                    // Guardar configuración de mapa al perder foco de ventana
                     window.addEventListener('blur', function() {
                         saveMapSettings();
                     });
@@ -495,18 +495,18 @@ namespace TarkovClient.Constants
                 })();";
 
         /// <summary>
-        /// PiP 모드용 컨트롤 제거 스크립트
+        /// Script de eliminación de controles para modo PiP
         /// </summary>
         public const string REMOVE_PIP_OVERLAY_SCRIPT =
             @"
                 (function() {
-                    // PiP 컨트롤 바 제거
+                    // Eliminar barra de control PiP
                     const controlBar = document.getElementById('pip-control-bar');
                     if (controlBar) {
                         controlBar.remove();
                     }
                     
-                    // PiP 스타일 제거
+                    // Eliminar estilo PiP
                     const style = document.getElementById('pip-control-style');
                     if (style) {
                         style.remove();
@@ -516,37 +516,37 @@ namespace TarkovClient.Constants
         public const string TARKOV_MARGET_ELEMENT_RESTORE =
             @"
                     try {
-                        // panel_left 복원
+                        // Restaurar panel_left
                         var panelLeft = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_left');
                         if (panelLeft) {
                             panelLeft.style.display = '';
                         }
 
-                        // panel_right 복원
+                        // Restaurar panel_right
                         var panelRight = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_right');
                         if (panelRight) {
                             panelRight.style.display = '';
                         }
                         
-                        // panel_top 복원
+                        // Restaurar panel_top
                         var panelTop = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_top');
                         if (panelTop) {
                             panelTop.style.display = '';
                         }
                         
-                        // header 복원
+                        // Restaurar header
                         var header = document.querySelector('#__nuxt > div > div > header');
                         if (header) {
                             header.style.display = '';
                         }
                         
-                        // footer-wrap 복원
+                        // Restaurar footer-wrap
                         var footerWrap = document.querySelector('#__nuxt > div > div > div.footer-wrap');
                         if (footerWrap) {
                             footerWrap.style.display = '';
                         }
                         
-                        // 지도 스케일링 초기화
+                        // Inicializar escalado de mapa
                         var mapElement = document.querySelector('#map');
                         if (mapElement) {
                             mapElement.style.transform = '';
@@ -611,31 +611,31 @@ namespace TarkovClient.Constants
                 ";
 
         /// <summary>
-        /// 큰 창 크기일 때 요소들을 복원하는 스크립트 (지도 스케일은 유지)
+        /// Script para restaurar elementos en tamaño de ventana grande (mantener escala de mapa)
         /// </summary>
         public const string RESTORE_ELEMENTS_FOR_LARGE_SIZE =
             @"
                     try {
                         
-                        // panel_left 복원
+                        // Restaurar panel_left
                         var panelLeft = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_left');
                         if (panelLeft) {
                             panelLeft.style.display = '';
                         }
 
-                        // panel_right 복원
+                        // Restaurar panel_right
                         var panelRight = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_right');
                         if (panelRight) {
                             panelRight.style.display = '';
                         }
                         
-                        // panel_top 복원
+                        // Restaurar panel_top
                         var panelTop = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_top');
                         if (panelTop) {
                             panelTop.style.display = '';
                         }
                         
-                        // header 복원
+                        // Restaurar header
                         var header = document.querySelector('#__nuxt > div > div > header');
                         if (header) {
                             header.style.display = '';
@@ -645,31 +645,31 @@ namespace TarkovClient.Constants
                 ";
 
         /// <summary>
-        /// 작은 창 크기일 때 요소들을 숨기는 스크립트
+        /// Script para ocultar elementos en tamaño de ventana pequeño
         /// </summary>
         public const string HIDE_ELEMENTS_FOR_SMALL_SIZE =
             @"
                     try {
                         
-                        // panel_left 숨김
+                        // Ocultar panel_left
                         var panelLeft = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_left');
                         if (panelLeft) {
                             panelLeft.style.display = 'none';
                         }
 
-                        // panel_right 숨김
+                        // Ocultar panel_right
                         var panelRight = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_right');
                         if (panelRight) {
                             panelRight.style.display = 'none';
                         }
                         
-                        // panel_top 숨김
+                        // Ocultar panel_top
                         var panelTop = document.querySelector('#__nuxt > div > div > div.page-content > div > div > div.panel_top');
                         if (panelTop) {
                             panelTop.style.display = 'none';
                         }
                         
-                        // header 숨김
+                        // Ocultar header
                         var header = document.querySelector('#__nuxt > div > div > header');
                         if (header) {
                             header.style.display = 'none';
@@ -679,7 +679,7 @@ namespace TarkovClient.Constants
                 ";
 
         /// <summary>
-        /// 현재 요소들의 표시/숨김 상태를 확인하는 스크립트
+        /// Script para verificar estado de visibilidad de elementos actuales
         /// </summary>
         public const string CHECK_ELEMENTS_VISIBILITY_STATUS =
             @"

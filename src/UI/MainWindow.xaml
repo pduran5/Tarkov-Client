@@ -12,19 +12,19 @@
         ResizeMode="CanResize">
     
     <Grid>
-        <!-- 탭 기반 UI -->
+        <!-- UI basada en pestañas -->
         <Grid x:Name="MainContentGrid" Panel.ZIndex="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="39"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             
-            <!-- 사이드바 (탭 관련 버튼들) -->
+            <!-- Barra lateral (botones relacionados con pestañas) -->
             <Border x:Name="TabSidebar" 
                     Grid.Column="0" 
                     Background="#FF1A1A1A">
                 <StackPanel Margin="0,8,0,0">
-                    <!-- 새 탭 추가 버튼 -->
+                    <!-- Botón para agregar nueva pestaña -->
                     <Button x:Name="NewTabButton"
                             Width="35" Height="35"
                             Margin="2,2,0,2"
@@ -61,7 +61,7 @@
                         </Button.Style>
                     </Button>
                     
-                    <!-- 설정 버튼 -->
+                    <!-- Botón de configuración -->
                     <Button x:Name="SettingsButton"
                             Width="35" Height="35"
                             Margin="2,2,0,2"
@@ -101,14 +101,14 @@
                 </StackPanel>
             </Border>
             
-            <!-- 메인 탭 영역 -->
+            <!-- Área principal de pestañas -->
             <TabControl x:Name="TabContainer" 
                         Grid.Column="1"
                         Panel.ZIndex="100"
                         Background="#FF1A1A1A"
                         BorderThickness="0">
                 <TabControl.Resources>
-                    <!-- 탭 헤더 스타일 -->
+                    <!-- Estilo de encabezado de pestaña -->
                     <Style TargetType="TabItem">
                         <Setter Property="Background" Value="#FF2A2A2A"/>
                         <Setter Property="Foreground" Value="White"/>
@@ -168,7 +168,7 @@
         
         
         
-        <!-- 전체 로딩 상태 표시 -->
+        <!-- Indicador de estado de carga completa -->
         <Border x:Name="LoadingPanel"
                 Background="#DD1A1A1A"
                 Visibility="Collapsed"
@@ -181,7 +181,7 @@
                            Foreground="White"
                            HorizontalAlignment="Center"
                            Margin="0,0,0,20"/>
-                <TextBlock Text="초기화 중..."
+                <TextBlock Text="Inicializando..."
                            FontSize="16" 
                            Foreground="#FF888888"
                            HorizontalAlignment="Center"/>
