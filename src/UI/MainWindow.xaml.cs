@@ -207,6 +207,10 @@ public partial class MainWindow : Window
             webView.CoreWebView2.Settings.AreHostObjectsAllowed = true;
             webView.CoreWebView2.Settings.IsScriptEnabled = true;
 
+            // Configurar intercepción de recursos para caché de sitio completo (Offline Support)
+            webView.CoreWebView2.AddWebResourceRequestedFilter("*tarkov-market.com*", CoreWebView2WebResourceContext.All);
+            webView.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
+
             // Registrar manejadores de eventos
             webView.NavigationCompleted += (sender, e) =>
                 WebView_NavigationCompleted(sender, e, tabItem);
@@ -423,6 +427,39 @@ public partial class MainWindow : Window
             }
         }
         catch (Exception) { }
+    }
+
+    // Manejador de intercepción de recursos para caché
+    private async void CoreWebView2_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs e)
+    {
+        var webView = sender as Microsoft.Web.WebView2.Core.CoreWebView2;
+
+        // Interceptar todo de tarkov-market.com
+        if (e.Request.Uri.Contains("tarkov-market.com"))
+        {
+            var deferral = e.GetDeferral();
+            try
+            {
+                // Llamar a GetCachedResourceAsync que devuelve struct CacheResult
+                var result = await MapCacheManager.GetCachedResourceAsync(e.Request.Uri);
+                var stream = result.Stream;
+                var contentType = result.ContentType;
+                
+                if (stream != null)
+                {
+                    e.Response = webView.Environment.CreateWebResourceResponse(
+                        stream,
+                        200,
+                        "OK",
+                        $"Content-Type: {contentType}; Access-Control-Allow-Origin: *");
+                }
+            }
+            catch (Exception) { }
+            finally
+            {
+                deferral.Complete();
+            }
+        }
     }
 
     // Evento de cambio de tamaño de ventana

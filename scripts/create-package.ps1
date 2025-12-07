@@ -15,7 +15,7 @@ else {
         Write-Host "[INFO] Using version from csproj: $version" -ForegroundColor Cyan
     }
     else {
-        $version = "v0.1.1"
+        $version = "v1.5"
         Write-Host "[INFO] Using default version: $version" -ForegroundColor Yellow
     }
 }

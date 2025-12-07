@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Web.WebView2.Wpf;
+using TarkovClient.Utils;
 
 namespace TarkovClient
 {
@@ -56,8 +57,42 @@ namespace TarkovClient
 
                 // Cargar la misma URL que la ventana principal
                 PipWebView.Source = new Uri(Env.WebsiteUrl);
+
+                // Configurar intercepción de recursos para caché de sitio completo (Offline Support)
+                PipWebView.CoreWebView2.AddWebResourceRequestedFilter("*tarkov-market.com*", CoreWebView2WebResourceContext.All);
+                PipWebView.CoreWebView2.WebResourceRequested += CoreWebView2_WebResourceRequested;
             }
             catch (Exception) { }
+        }
+
+        private async void CoreWebView2_WebResourceRequested(object sender, CoreWebView2WebResourceRequestedEventArgs e)
+        {
+            // Interceptar todo de tarkov-market.com
+            if (e.Request.Uri.Contains("tarkov-market.com"))
+            {
+                var deferral = e.GetDeferral();
+                try
+                {
+                    // Llamar a GetCachedResourceAsync que devuelve struct CacheResult
+                    var result = await MapCacheManager.GetCachedResourceAsync(e.Request.Uri);
+                    var stream = result.Stream;
+                    var contentType = result.ContentType;
+                    
+                    if (stream != null)
+                    {
+                        e.Response = PipWebView.CoreWebView2.Environment.CreateWebResourceResponse(
+                            stream,
+                            200,
+                            "OK",
+                            $"Content-Type: {contentType}; Access-Control-Allow-Origin: *");
+                    }
+                }
+                catch (Exception) { }
+                finally
+                {
+                    deferral.Complete();
+                }
+            }
         }
 
         #region Interacción de hover

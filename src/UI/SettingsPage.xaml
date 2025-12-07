@@ -1,4 +1,4 @@
-<UserControl x:Class="TarkovClient.SettingsPage"
+﻿<UserControl x:Class="TarkovClient.SettingsPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -43,10 +43,6 @@
                                       HorizontalAlignment="Left"
                                       Checked="GlobalPipEnabled_Changed"
                                       Unchecked="GlobalPipEnabled_Changed"/>
-                            <TextBlock Text="Minimap(PIP) Activate"
-                                       Foreground="#FF888888"
-                                       FontSize="11"
-                                       Margin="20,2,0,0"/>
                         </StackPanel>
                         
                         <!-- Configuración de recordar posición PiP -->
@@ -56,10 +52,6 @@
                                       Foreground="White" 
                                       FontSize="14"
                                       HorizontalAlignment="Left"/>
-                            <TextBlock Text="Remember Minimap(PIP) Window Size/Position"
-                                       Foreground="#FF888888"
-                                       FontSize="11"
-                                       Margin="20,2,0,0"/>
                         </StackPanel>
                         
                         <!-- Configuración de tecla rápida PiP -->
@@ -71,10 +63,6 @@
                                       HorizontalAlignment="Left"
                                       Checked="PipHotkeyEnabled_Changed"
                                       Unchecked="PipHotkeyEnabled_Changed"/>
-                            <TextBlock Text="Use PiP Activation Button"
-                                       Foreground="#FF888888"
-                                       FontSize="11"
-                                       Margin="20,2,0,0"/>
                         </StackPanel>
                         
                         <!-- Configuración de entrada de tecla rápida -->
@@ -184,10 +172,6 @@
                                    Foreground="#FF888888"
                                    FontSize="11"
                                    Margin="20,2,0,0"/>
-                        <TextBlock Text="Automatically delete old log folders on program start"
-                                   Foreground="#FF888888"
-                                   FontSize="11"
-                                   Margin="20,2,0,0"/>
                     </StackPanel>
                     
                     <!-- Limpieza automática de capturas de pantalla -->
@@ -198,10 +182,6 @@
                                   FontSize="14"
                                   HorizontalAlignment="Left"/>
                         <TextBlock Text="Elimina automáticamente las capturas de pantalla al finalizar la incursión"
-                                   Foreground="#FF888888"
-                                   FontSize="11"
-                                   Margin="20,2,0,0"/>
-                        <TextBlock Text="Automatically delete screenshots on raid end"
                                    Foreground="#FF888888"
                                    FontSize="11"
                                    Margin="20,2,0,0"/>
@@ -250,3 +230,4 @@
         </StackPanel>
     </ScrollViewer>
 </UserControl>
+

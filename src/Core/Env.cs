@@ -79,6 +79,22 @@ namespace TarkovClient
             set { _screenshotsFolder = value; }
         }
 
+        private static string _cacheFolder;
+        public static string CacheFolder
+        {
+            get
+            {
+                if (_cacheFolder == null)
+                {
+                    _cacheFolder = Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory,
+                        "Cache"
+                    );
+                }
+                return _cacheFolder;
+            }
+        }
+
         //===================== AppContext Settings ============================
 
         private static AppSettings _appSettings = null;
