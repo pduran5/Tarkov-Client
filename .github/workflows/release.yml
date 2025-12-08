@@ -54,11 +54,11 @@ jobs:
           $content = $content -replace '<AssemblyVersion>[\d\.]+</AssemblyVersion>', "<AssemblyVersion>$version</AssemblyVersion>"
           Set-Content -Path $csprojPath -Value $content -Encoding UTF8
 
-          # 사용법.txt 파일의 버전 업데이트
-          if (Test-Path "사용법.txt") {
-            $usageContent = Get-Content "사용법.txt" -Raw -Encoding UTF8
+          # README.md 파일의 버전 업데이트
+          if (Test-Path "README.md") {
+            $usageContent = Get-Content "README.md" -Raw -Encoding UTF8
             $usageContent = $usageContent -replace 'Tarkov Client v[\d\.]+', "Tarkov Client v$version"
-            Set-Content -Path "사용법.txt" -Value $usageContent -Encoding UTF8
+            Set-Content -Path "README.md" -Value $usageContent -Encoding UTF8
           }
 
           echo "Updated version to: $version"

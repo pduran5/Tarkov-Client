@@ -1,250 +1,254 @@
-# 🎯 Tarkov Client
+# 🎯 Cliente Tarkov
 
-> Tarkov Market Pilot을 위한 전용 데스크톱 애플리케이션
+> Aplicación de escritorio dedicada para Tarkov Market Pilot
 
-Tarkov Client는 Tarkov Market Pilot 웹사이트를 전용 데스크톱 앱으로 실행하는 프로그램입니다.  
-게임과 연동하여 실시간 맵 감지, 위치 추적, 자동 파일 정리 기능을 제공합니다.
+**Modificación del Cliente Tarkov v0.1.5 basado en el proyecto original de TarkovClient.**
 
-## ⚡ 주요 특징
+El Cliente Tarkov es un programa que ejecuta el sitio web Tarkov Market Pilot como una aplicación de escritorio dedicada.
+Se integra con el juego para proporcionar detección de mapas en tiempo real, seguimiento de ubicación y limpieza automática de archivos.
+El sitio web Tarkov Market se cachea en la carpeta "Cache" para que el programa pueda funcionar sin conexión.
 
-- ✅ **Self-Contained 배포** - .NET Runtime 별도 설치 불필요
-- ✅ **단일 실행 파일** - 복잡한 설치 과정 없이 즉시 실행
-- ✅ **다중 탭 지원** - 여러 웹페이지 동시 사용 가능
-- ✅ **실시간 맵 감지** - 게임 로그 기반 자동 맵 변경 감지
-- ✅ **스크린샷 추적** - 게임 스크린샷 기반 위치 및 방향 추적
-- ✅ **자동 파일 정리** - 로그 폴더 및 스크린샷 자동 정리 (성능 최적화)
-- ✅ **병렬 처리 최적화** - 파일 처리 성능 향상
+## ⚡ Características Principales
 
-## 📥 다운로드
+- ✅ **Distribución Autocontenida** - No requiere instalación separada de .NET Runtime
+- ✅ **Ejecutable Único** - Ejecución inmediata sin procesos de instalación complejos
+- ✅ **Soporte de Múltiples Pestañas** - Uso simultáneo de varias páginas web
+- ✅ **Detección de Mapa en Tiempo Real** - Detección automática de cambio de mapa basada en registros del juego
+- ✅ **Rastreo de Capturas de Pantalla** - Rastreo de ubicación y dirección basado en capturas de pantalla del juego
+- ✅ **Limpieza Automática de Archivos** - Limpieza automática de carpetas de registro y capturas de pantalla (optimización de rendimiento)
+- ✅ **Optimización de Procesamiento Paralelo** - Rendimiento mejorado en el procesamiento de archivos
+- ✅ **Cacheo de Mapas Local** - Funcionamiento sin conexión gracias al cacheo local
 
-_최신 버전_: [Latest Release](../../releases/latest)
+## 📥 Descargar
 
-**설치 방법**:
+_Última versión_: [Latest Release](../../releases/latest)
 
-1. ZIP 파일 다운로드
-2. 압축 해제
-3. `TarkovClient.exe` 더블클릭
+**Cómo instalar**:
 
-**장점**: 설치 없이 바로 실행, 이동 가능
+1. Descarga el archivo ZIP
+2. Descomprime
+3. Haz doble clic en `TarkovClient.exe`
 
-## 🖥️ 시스템 요구사항
+**Ventajas**: Ejecución inmediata sin instalación, portable
 
-- **운영체제**: Windows 10/11 (64비트)
-- **메모리**: 최소 512MB 여유 공간
-- **기타**: WebView2 Runtime (Windows 11 기본 포함)
+## 🖥️ Requisitos del Sistema
 
-> ⚠️ **WebView2 Runtime**: Windows 10 사용자는 **Windows를 최신 버전으로 업데이트**하시면 자동으로 설치됩니다. 업데이트 후에도 문제가 있다면 [Microsoft 다운로드](https://developer.microsoft.com/microsoft-edge/webview2/)에서 수동 설치하세요.
+- **Sistema Operativo**: Windows 10/11 (64 bits)
+- **Memoria**: Mínimo 512MB de espacio libre
+- **Otros**: WebView2 Runtime (Incluido por defecto en Windows 11)
 
-## 🚀 사용법
+> ⚠️ **WebView2 Runtime**: Los usuarios de Windows 10 deben **actualizar Windows a la última versión** para la instalación automática. Si el problema persiste después de la actualización, instala manualmente desde [Descarga de Microsoft](https://developer.microsoft.com/microsoft-edge/webview2/).
 
-### 기본 실행
+## 🚀 Uso
 
-1. **프로그램 시작**
+### Ejecución Básica
 
-   - `TarkovClient.exe` 더블클릭 실행
-   - 자동으로 Tarkov Market Pilot 페이지 로드
-   - 시스템 트레이에 아이콘 표시
+1. **Iniciar Programa**
 
-2. **시스템 트레이 메뉴**
-   - **Open**: 웹사이트를 기본 브라우저에서 열기
-   - **Exit**: 프로그램 완전 종료
+   - Haz doble clic en `TarkovClient.exe`
+   - Carga automáticamente la página de Tarkov Market Pilot
+   - Aparece un icono en la bandeja del sistema
 
-### 탭 사용법
+2. **Menú de la Bandeja del Sistema**
+   - **Open**: Abrir el sitio web en el navegador predeterminado
+   - **Exit**: Cerrar el programa completamente
 
-- **새 탭 추가**: 왼쪽 상단 `+` 버튼 클릭
-- **탭 닫기**: 각 탭의 `✕` 버튼 클릭
-- **최소 1개 탭** 항상 유지됨
+### Uso de Pestañas
 
-### 게임 연동 설정
+- **Añadir nueva pestaña**: Haz clic en el botón `+` arriba a la izquierda
+- **Cerrar pestaña**: Haz clic en el botón `✕` de cada pestaña
+- **Mínimo 1 pestaña** siempre se mantiene
 
-#### 자동 감지 (권장)
+### Configuración de Integración con el Juego
 
-프로그램이 자동으로 게임 설치 경로를 찾습니다:
+#### Detección Automática (Recomendado)
 
-1. **게임 폴더**: Windows 레지스트리에서 자동 검색
-2. **스크린샷 폴더**: 사용자 문서 폴더에서 자동 검색
+El programa busca automáticamente la ruta de instalación del juego:
 
-#### 수동 설정
+1. **Carpeta del Juego**: Búsqueda automática en el registro de Windows
+2. **Carpeta de Capturas**: Búsqueda automática en la carpeta de documentos del usuario
 
-자동 감지가 실패할 경우 웹 인터페이스에서 수동 설정:
+#### Configuración Manual
 
-1. **게임 폴더 경로**
+Configuración manual en la interfaz web si falla la detección automática:
 
-   - 기본값: `C:\Battlestate Games\Escape from Tarkov\`
-   - 예시 경로: `D:\Games\Escape from Tarkov\`
+1. **Ruta de la Carpeta del Juego**
 
-2. **스크린샷 폴더 경로**
-   - 기본값: `%USERPROFILE%\Documents\Escape From Tarkov\Screenshots\`
-   - 예시 경로: `C:\Users\사용자명\Documents\Escape From Tarkov\Screenshots\`
+   - Valor predeterminado: `C:\Battlestate Games\Escape from Tarkov\`
+   - Ejemplo: `D:\Games\Escape from Tarkov\`
 
-### 스크린샷 추적 설정
+2. **Ruta de la Carpeta de Capturas**
+   - Valor predeterminado: `%USERPROFILE%\Documents\Escape From Tarkov\Screenshots\`
+   - Ejemplo: `C:\Users\NombreUsuario\Documents\Escape From Tarkov\Screenshots\`
 
-게임 내에서 스크린샷을 촬영하면 자동으로 위치 추적이 시작됩니다. 게임에서 설정한 스크린샷 키를 사용하여 촬영하세요.
+### Configuración de Rastreo de Capturas
 
-## 🔧 핵심 기능
+El rastreo de ubicación comienza automáticamente cuando tomas una captura de pantalla dentro del juego. Usa la tecla de captura de pantalla configurada en el juego.
 
-### 🗺️ 맵 자동 감지
+## 🔧 Funciones Principales
 
-- 게임 로그 파일 실시간 모니터링
-- 맵 변경 시 자동 감지 및 표시
-- 방향 표시기로 시선 방향 표시
+### 🗺️ Detección Automática de Mapa
 
-### 📸 스크린샷 기반 위치 추적
+- Monitoreo en tiempo real del archivo de registro del juego
+- Detección y visualización automática al cambiar de mapa
+- Indicador de dirección para mostrar hacia dónde se mira
 
-- 게임 내 스크린샷 자동 분석
-- 실시간 위치 및 방향 업데이트
-- 퀘스트 진행 상황 추적
+### 📸 Rastreo de Ubicación por Captura
 
-### 🧹 자동 파일 정리 시스템
+- Análisis automático de capturas de pantalla del juego
+- Actualización de ubicación y dirección en tiempo real
+- Rastreo del progreso de misiones
 
-**성능 최적화로 업그레이드됨!**
+### 🧹 Sistema de Limpieza Automática de Archivos
 
-#### 로그 폴더 정리
+**¡Actualizado para optimización de rendimiento!**
 
-- 프로그램 시작 시 구 로그 폴더 자동 정리
-- 최신 폴더 1개만 보존, 나머지 삭제
-- 디스크 공간 절약 및 성능 향상
+#### Limpieza de Carpeta de Registros
 
-#### 스크린샷 자동 정리
+- Limpieza automática de carpetas de registro antiguas al iniciar el programa
+- Conserva solo la carpeta más reciente, elimina el resto
+- Ahorro de espacio en disco y mejora de rendimiento
 
-- BattlEye 초기화 시점에 자동 실행
-- **병렬 처리**로 빠른 삭제 성능
-- 파일 권한 문제 자동 해결
-- 시스템 리소스 최적화
+#### Limpieza Automática de Capturas
 
-### 🌐 WebSocket 서버
+- Ejecución automática al inicializar BattlEye
+- Rendimiento de eliminación rápido con **procesamiento paralelo**
+- Resolución automática de problemas de permisos de archivos
+- Optimización de recursos del sistema
 
-- 포트: `localhost:5123`
-- 웹 인터페이스와 실시간 통신
-- 게임 데이터 실시간 전송
+### 🌐 Servidor WebSocket
 
-## 🛠️ 문제 해결
+- Puerto: `localhost:5123`
+- Comunicación en tiempo real con la interfaz web
+- Transmisión de datos del juego en tiempo real
 
-### Windows Defender 경고
+## 🛠️ Solución de Problemas
 
-**원인**: 코드 서명 인증서 미보유 (유료)
-**해결**:
+### Advertencia de Windows Defender
 
-1. Windows Defender 경고창에서 **"추가 정보"** 클릭
-2. **"실행"** 버튼 클릭
-3. 정상 설치 진행
+**Causa**: No se posee certificado de firma de código (de pago)
+**Solución**:
 
-> 💡 **안전성**: 오픈소스 프로젝트로 모든 코드가 공개되어 있어 투명성을 보장합니다.
+1. En la ventana de advertencia de Windows Defender, haz clic en **"Más información"**
+2. Haz clic en el botón **"Ejecutar de todas formas"**
+3. Procede con la instalación normal
 
-### WebView2 관련 오류
+> 💡 **Seguridad**: Proyecto de código abierto con todo el código público para garantizar transparencia.
 
-- **Windows 11**: 기본 포함으로 문제 없음
-- **Windows 10**: Windows 업데이트 실행 후 재시도
-- **수동 설치**: [WebView2 Runtime 다운로드](https://developer.microsoft.com/microsoft-edge/webview2/)
+### Errores relacionados con WebView2
 
-### 포트 충돌 (5123)
+- **Windows 11**: Incluido por defecto, sin problemas
+- **Windows 10**: Reintentar después de ejecutar Windows Update
+- **Instalación Manual**: [Descargar WebView2 Runtime](https://developer.microsoft.com/microsoft-edge/webview2/)
 
-**증상**: 웹소켓 서버 시작 실패
-**해결**: 다른 프로그램 종료 후 재실행
+### Conflicto de Puerto (5123)
 
-### 맵 감지가 되지 않는 경우
+**Síntoma**: Fallo al iniciar el servidor WebSocket
+**Solución**: Cerrar otros programas y reiniciar
 
-**원인**: 로그 파일 접근 실패 또는 권한 문제
+### Si no se detecta el mapa
 
-**해결 방법**:
+**Causa**: Fallo de acceso al archivo de registro o problema de permisos
 
-1. **관리자 권한으로 실행**
-   - `TarkovClient.exe` 우클릭 → **관리자 권한으로 실행**
-2. **게임 폴더 경로 확인**
-   - 웹 인터페이스에서 게임 폴더 경로가 올바른지 확인
-   - 기본값: `C:\Battlestate Games\Escape from Tarkov\`
-3. **로그 폴더 접근 권한 확인**
-   - `게임폴더\Logs` 폴더에 읽기 권한이 있는지 확인
+**Solución**:
 
-### 스크린샷 추적이 안되는 경우
+1. **Ejecutar como administrador**
+   - Clic derecho en `TarkovClient.exe` → **Ejecutar como administrador**
+2. **Verificar ruta de carpeta del juego**
+   - Verificar en la interfaz web si la ruta es correcta
+   - Valor predeterminado: `C:\Battlestate Games\Escape from Tarkov\`
+3. **Verificar permisos de carpeta de registros**
+   - Verificar permisos de lectura en la carpeta `CarpetaJuego\Logs`
 
-**원인**: 스크린샷 폴더 경로 문제 또는 키 설정 문제
+### Si no funciona el rastreo por captura
 
-**해결 방법**:
+**Causa**: Problema de ruta de carpeta de capturas o configuración de teclas
 
-1. **스크린샷 폴더 경로 확인**
-   - 기본값: `%USERPROFILE%\Documents\Escape From Tarkov\Screenshots\`
-2. **스크린샷 기능 테스트**
-   - 게임에서 스크린샷을 촬영하여 파일이 생성되는지 확인
+**Solución**:
 
-### 자동 파일 정리가 작동하지 않는 경우
+1. **Verificar ruta de carpeta de capturas**
+   - Valor predeterminado: `%USERPROFILE%\Documents\Escape From Tarkov\Screenshots\`
+2. **Probar función de captura**
+   - Tomar una captura en el juego y verificar si se crea el archivo
 
-**원인**: 파일 권한 문제 또는 폴더 접근 실패
+### Si la limpieza automática no funciona
 
-**해결 방법**:
+**Causa**: Problema de permisos de archivo o fallo de acceso a carpeta
 
-1. **관리자 권한으로 실행**
-   - 파일 삭제 권한이 필요할 수 있음
-2. **폴더 권한 확인**
-   - 로그 폴더와 스크린샷 폴더 쓰기 권한 확인
-3. **수동 정리**
-   - 필요시 폴더를 수동으로 정리 후 프로그램 재시작
+**Solución**:
 
-### 방화벽 경고가 나타나는 경우
+1. **Ejecutar como administrador**
+   - Puede requerir permisos de eliminación de archivos
+2. **Verificar permisos de carpeta**
+   - Verificar permisos de escritura en carpetas de registro y capturas
+3. **Limpieza manual**
+   - Limpiar manualmente las carpetas si es necesario y reiniciar el programa
 
-**해결 방법**:
+### Si aparece advertencia de firewall
 
-- Windows Defender 방화벽에서 허용 선택
-- 포트 5123 사용 확인
-- 프로그램을 신뢰할 수 있는 프로그램으로 등록
+**Solución**:
 
-## 🏗️ 개발 정보
+- Seleccionar permitir en el Firewall de Windows Defender
+- Verificar uso del puerto 5123
+- Registrar el programa como aplicación de confianza
 
-### 기술 스택
+## 🏗️ Información de Desarrollo
 
-- **.NET 8.0** - Self-Contained 배포
-- **WPF** - Windows 네이티브 UI
-- **WebView2** - Chromium 기반 웹 렌더링
-- **Fleck** - WebSocket 서버 라이브러리
+### Stack Tecnológico
 
-### 빌드 명령어
+- **.NET 8.0** - Despliegue Autocontenido
+- **WPF** - UI Nativa de Windows
+- **WebView2** - Renderizado web basado en Chromium
+- **Fleck** - Librería de servidor WebSocket
+
+### Comandos de Construcción
 
 ```bash
-# 개발용 빌드
+# Build de desarrollo
 ./main.ps1 dev
 
-# Self-Contained 배포 빌드
+# Build de publicación Autocontenida
 ./main.ps1 publish
 
-# GitHub Release용 ZIP 패키지
+# Paquete ZIP para GitHub Release
 ./main.ps1 package
 ```
 
-## 🔒 보안 및 개인정보
+## 🔒 Seguridad y Privacidad
 
-- ✅ **로컬 실행**: 모든 처리가 로컬에서 수행
-- ✅ **읽기 전용**: 게임 파일 수정하지 않음
-- ✅ **개인정보 보호**: 개인정보 수집하지 않음
-- ✅ **안전한 통신**: Tarkov Market과만 통신
+- ✅ **Ejecución Local**: Todo el procesamiento se realiza localmente
+- ✅ **Solo Lectura**: No modifica los archivos del juego
+- ✅ **Privacidad**: No recopila información personal
+- ✅ **Comunicación Segura**: Solo se comunica con Tarkov Market
 
-## 📝 업데이트
+## 📝 Actualización
 
-1. 기존 프로그램 종료
-2. 새 ZIP 파일 다운로드
-3. 압축 해제 후 덮어쓰기
-4. 프로그램 재실행
+1. Cerrar el programa existente
+2. Descargar el nuevo archivo ZIP
+3. Descomprimir y sobrescribir
+4. Reiniciar el programa
 
-> 💾 **설정 보존**: 모든 사용자 설정이 자동으로 보존됩니다.
+> 💾 **Conservación de Configuración**: Todas las configuraciones de usuario se conservan automáticamente.
 
-## 🆘 지원 및 문의
+## 🆘 Soporte y Consultas
 
-**문제 발생 시**:
+**En caso de problemas**:
 
-1. 관리자 권한으로 실행 시도
-2. [GitHub Issues](../../issues)에 문의
+1. Intentar ejecutar como administrador
+2. Consultar en [GitHub Issues](../../issues)
 
-## 🔗 링크
+## 🔗 Enlaces
 
-- **GitHub 저장소**: [TarkovClient](../../)
-- **이슈 리포트**: [GitHub Issues](../../issues)
-- **최신 릴리스**: [Releases](../../releases)
+- **Repositorio GitHub**: [TarkovClient](../../)
+- **Reporte de Problemas**: [GitHub Issues](../../issues)
+- **Últimas Versiones**: [Releases](../../releases)
 - **Tarkov Market**: [https://tarkov-market.com/pilot](https://tarkov-market.com/pilot)
 
 ---
 
 <div align="center">
 
-**Tarkov Client v0.1.1**  
+**Tarkov Client v0.1.5**  
 © 2025 TarkovClient Project
 
 [GitHub](../../) • [Issues](../../issues) • [Releases](../../releases)
